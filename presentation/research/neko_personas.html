@@ -1,0 +1,1255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Neko Health — User Personas</title>
+  <style>
+    /* ── Base ─────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:           #F8F6F1;
+      --card-bg:      #FFFFFF;
+      --dark-green:   #2C3E30;
+      --mid-green:    #3D5940;
+      --accent-green: #5A7A5E;
+      --light-green:  #E8EDE8;
+      --uk-accent:    #4A7C59;
+      --us-accent:    #2B5F8A;
+      --us-light:     #E8EFF7;
+      --uk-light:     #E8F0E8;
+      --text:         #1A1A1A;
+      --muted:        #6B6B6B;
+      --border:       #DDD9D0;
+      --tag-bg:       #F0ECE4;
+      --warn-bg:      #FDF6EC;
+      --warn-border:  #E8C87A;
+      --quote-bg:     #F2F0EA;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+      padding: 0;
+    }
+
+    a { color: inherit; }
+
+    /* ── Page Header ───────────────────────────────────── */
+    .page-header {
+      background: var(--bg);
+      color: var(--text);
+      border-bottom: 1px solid var(--border);
+    }
+    .page-header-inner {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 60px 48px 56px;
+    }
+    .page-header .eyebrow {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent-green);
+      margin-bottom: 14px;
+    }
+    .page-header h1 {
+      font-size: clamp(26px, 4vw, 42px);
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+      margin-bottom: 14px;
+      color: var(--text);
+    }
+    .page-header .subtitle {
+      font-size: 15px;
+      color: var(--muted);
+      max-width: 620px;
+      line-height: 1.7;
+    }
+
+    /* ── Container ─────────────────────────────────────── */
+    .container {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 0 48px;
+    }
+
+    /* ── Intro Block ───────────────────────────────────── */
+    .intro-block {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 36px 40px;
+      margin: 40px auto;
+      max-width: 1080px;
+    }
+    .intro-block h2 {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent-green);
+      margin-bottom: 16px;
+    }
+    .intro-block p {
+      font-size: 15px;
+      color: #333;
+      margin-bottom: 14px;
+      max-width: 860px;
+    }
+    .intro-block p:last-child { margin-bottom: 0; }
+
+    .context-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-top: 24px;
+    }
+    .context-card {
+      border-radius: 8px;
+      padding: 20px 22px;
+    }
+    .context-card.uk { background: var(--uk-light); border-left: 4px solid var(--uk-accent); }
+    .context-card.us { background: var(--us-light); border-left: 4px solid var(--us-accent); }
+    .context-card h3 {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .context-card.uk h3 { color: var(--uk-accent); }
+    .context-card.us h3 { color: var(--us-accent); }
+    .context-card ul {
+      list-style: none;
+      padding: 0;
+    }
+    .context-card ul li {
+      font-size: 13.5px;
+      color: #333;
+      padding: 4px 0;
+      border-bottom: 1px solid rgba(0,0,0,0.07);
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .context-card ul li:last-child { border-bottom: none; }
+    .context-card ul li::before {
+      content: '›';
+      font-size: 16px;
+      font-weight: bold;
+      flex-shrink: 0;
+      margin-top: -1px;
+    }
+    .context-card.uk ul li::before { color: var(--uk-accent); }
+    .context-card.us ul li::before { color: var(--us-accent); }
+
+    /* ── Section Headers ────────────────────────────────── */
+    .section-header {
+      padding: 18px 0 24px;
+      margin-top: 16px;
+    }
+    .section-header .market-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .market-label .flag {
+      font-size: 20px;
+    }
+    .section-header.uk .market-label { color: var(--uk-accent); }
+    .section-header.us .market-label { color: var(--us-accent); }
+    .section-header h2 {
+      font-size: clamp(20px, 2.5vw, 28px);
+      font-weight: 400;
+      color: var(--dark-green);
+      margin-bottom: 8px;
+    }
+    .section-header p {
+      font-size: 14px;
+      color: var(--muted);
+      max-width: 640px;
+    }
+    .section-divider {
+      height: 3px;
+      border-radius: 2px;
+      margin-bottom: 28px;
+    }
+    .section-divider.uk { background: linear-gradient(90deg, var(--uk-accent), transparent); }
+    .section-divider.us { background: linear-gradient(90deg, var(--us-accent), transparent); }
+
+    /* ── Persona Cards ──────────────────────────────────── */
+    .persona-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(460px, 1fr));
+      gap: 24px;
+      margin-bottom: 12px;
+    }
+
+    .persona-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: box-shadow 0.2s;
+    }
+    .persona-card:hover {
+      box-shadow: 0 6px 28px rgba(0,0,0,0.09);
+    }
+
+    .card-header {
+      padding: 20px 24px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .card-header .persona-num {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .uk .persona-num { color: var(--uk-accent); }
+    .us .persona-num { color: var(--us-accent); }
+    .card-header h3 {
+      font-size: 19px;
+      font-weight: 400;
+      color: var(--dark-green);
+      line-height: 1.25;
+      margin-bottom: 4px;
+    }
+    .card-header .age-range {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+    .jtbd-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .jtbd-tag {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      font-size: 10.5px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      padding: 3px 9px;
+      border-radius: 100px;
+    }
+    .uk .jtbd-tag { background: var(--uk-light); color: var(--uk-accent); }
+    .us .jtbd-tag { background: var(--us-light); color: var(--us-accent); }
+
+    .card-body {
+      padding: 20px 24px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .quote-block {
+      background: var(--quote-bg);
+      border-left: 3px solid var(--border);
+      border-radius: 0 6px 6px 0;
+      padding: 12px 16px;
+      font-style: italic;
+      font-size: 14px;
+      color: #444;
+      line-height: 1.55;
+    }
+    .uk .quote-block { border-left-color: var(--uk-accent); }
+    .us .quote-block { border-left-color: var(--us-accent); }
+
+    .detail-section h4 {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      font-size: 10.5px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 7px;
+    }
+    .detail-section ul {
+      list-style: none;
+      padding: 0;
+    }
+    .detail-section ul li {
+      font-size: 13.5px;
+      color: #333;
+      padding: 3px 0;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .detail-section ul li::before {
+      content: '·';
+      font-size: 18px;
+      line-height: 1.1;
+      flex-shrink: 0;
+      color: var(--accent-green);
+    }
+
+    .neko-offer {
+      background: var(--light-green);
+      border-radius: 8px;
+      padding: 12px 16px;
+    }
+    .neko-offer h4 {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      font-size: 10.5px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--mid-green);
+      margin-bottom: 6px;
+    }
+    .neko-offer p {
+      font-size: 13.5px;
+      color: #2A3C2B;
+      line-height: 1.5;
+    }
+
+    .watch-out {
+      background: var(--warn-bg);
+      border: 1px solid var(--warn-border);
+      border-radius: 8px;
+      padding: 12px 16px;
+    }
+    .watch-out h4 {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      font-size: 10.5px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #8B6914;
+      margin-bottom: 6px;
+    }
+    .watch-out p {
+      font-size: 13.5px;
+      color: #5C4409;
+      line-height: 1.5;
+    }
+
+    /* ── JTBD Comparison Table ──────────────────────────── */
+    .table-section {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 32px 36px;
+      margin: 48px auto 60px;
+      max-width: 1080px;
+      overflow-x: auto;
+    }
+    .table-section h2 {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent-green);
+      margin-bottom: 6px;
+    }
+    .table-section .table-subtitle {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 24px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      font-size: 13px;
+    }
+    thead tr {
+      background: var(--dark-green);
+      color: #fff;
+    }
+    thead th {
+      padding: 12px 16px;
+      text-align: left;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    thead th:first-child { border-radius: 6px 0 0 0; }
+    thead th:last-child  { border-radius: 0 6px 0 0; }
+    tbody tr { border-bottom: 1px solid var(--border); }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: var(--bg); }
+    tbody td {
+      padding: 11px 16px;
+      vertical-align: top;
+      color: #333;
+      line-height: 1.45;
+    }
+    tbody td:first-child { color: var(--dark-green); font-weight: 600; }
+    .strength-cell {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .strength-dots {
+      display: flex;
+      gap: 3px;
+    }
+    .dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+    }
+    .dot.filled-uk  { background: var(--uk-accent); }
+    .dot.filled-us  { background: var(--us-accent); }
+    .dot.empty { background: #DDD; }
+    .strength-label {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    /* ── Footer ─────────────────────────────────────────── */
+    .page-footer {
+      background: var(--dark-green);
+      color: #A8C5AD;
+      text-align: center;
+      padding: 28px 24px;
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      font-size: 12px;
+    }
+
+    /* ── Responsive ─────────────────────────────────────── */
+    @media (max-width: 800px) {
+      .page-header { padding: 40px 20px 32px; }
+      .intro-block { padding: 24px 20px; margin: 24px 16px; }
+      .context-grid { grid-template-columns: 1fr; }
+      .persona-grid { grid-template-columns: 1fr; }
+      .container { padding: 0 16px; }
+      .table-section { padding: 24px 16px; margin: 32px 16px 40px; }
+    }
+  /* ── Nav ───────────────────────────────────────────── */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: #2C3E30;
+    padding: 0 48px;
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    height: 52px;
+    overflow-x: auto;
+  }
+  nav a {
+    color: #AABDAC;
+    text-decoration: none;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    transition: color 0.15s;
+  }
+  nav a:hover { color: #FFFFFF; }
+  nav .nav-logo {
+    color: #FFFFFF;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-right: auto;
+    text-decoration: none;
+  }
+  .nav-sep { color: #3D5040; font-size: 14px; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <span class="nav-logo">Neko Health</span>
+  <a href="#">Personas</a>
+  <a href="competitive_landscape.html">Competitive</a>
+  <a href="../neko_ai_architecture.html">AI Intelligence</a>
+</nav>
+
+<!-- ───────────────────────────────── PAGE HEADER ── -->
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="eyebrow">Principal PM, AI/LLM · Neko Health</div>
+    <h1>User Personas<br/>UK &amp; US Markets</h1>
+    <p class="subtitle">Grounded in JTBD analysis across preventive health motivations. Includes NHS vs insurance context, persona cards, and cross-market JTBD comparison.</p>
+  </div>
+</div>
+
+<!-- ───────────────────────────────── INTRO ── -->
+<div class="container">
+  <div class="intro-block">
+    <h2>Market Context &amp; Framing</h2>
+    <p>Neko Health's user base isn't simply "health-conscious people." The motivations are highly specific — and critically, they differ between the UK and US in ways that affect product design, messaging, and where an AI/LLM layer can add most value.</p>
+    <p>In the UK, Neko fills a structural gap: the NHS delivers reactive, not preventive, care. Neko's users are often expressing frustration with a system they believe in but feel let down by. The emotional register is quieter — reassurance-seeking, not optimization-obsessing.</p>
+    <p>In the US (particularly New York), the context flips. Health optimisation is a cultural identity marker among Neko's likely early adopters. Function Health, Levels, and the Attia/Huberman ecosystem have primed these users to think in biomarkers and protocols. They're not seeking reassurance; they're seeking an imaging layer for their stack. Willingness to pay is higher, but so is the expectation of data sophistication.</p>
+
+    <div class="context-grid">
+      <div class="context-card uk">
+        <h3>🇬🇧 UK Context</h3>
+        <ul>
+          <li>NHS = free reactive care, essentially zero preventive offering</li>
+          <li>GP wait times avg. 2–3 weeks; specialist referrals can take months</li>
+          <li>Private health checks (Bupa MOT, Nuffield) exist but feel corporate, not personal</li>
+          <li>Competitors: Thriva (blood), ZOE (nutrition/CGM), BUPA/Nuffield health checks</li>
+          <li>£299/yr is meaningful spend; justified by "filling the NHS gap" narrative</li>
+          <li>Skin care / dermatology wait times: 3–6 months on NHS</li>
+        </ul>
+      </div>
+      <div class="context-card us">
+        <h3>🇺🇸 US (NYC) Context</h3>
+        <ul>
+          <li>Insurance system: preventive coverage varies wildly; many consumers frustrated</li>
+          <li>Longevity/biohacking culture is mainstream among affluent early adopters</li>
+          <li>Function Health ($499/yr), Parsley Health ($375/mo), HLI ($25k+) set expectations</li>
+          <li>NYC: time-poor executives, concierge medicine familiarity, HSA/FSA spending</li>
+          <li>Peter Attia, Huberman, Rhonda Patrick have educated consumers on biomarkers</li>
+          <li>Higher price tolerance; "comprehensive" scan expected to include deep data</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!--  UK PERSONAS                                       -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="container">
+  <div class="section-header uk">
+    <div class="market-label"><span class="flag">🇬🇧</span> United Kingdom — Existing Market</div>
+    <h2>UK Persona Profiles</h2>
+    <p>Users shaped by NHS dependency, private-sector frustration, and a growing but culturally reserved interest in personal health data.</p>
+  </div>
+  <div class="section-divider uk"></div>
+
+  <div class="persona-grid uk">
+
+    <!-- UK 1 -->
+    <div class="persona-card uk">
+      <div class="card-header">
+        <div class="persona-num">UK Persona 01</div>
+        <h3>The NHS-Frustrated Professional</h3>
+        <div class="age-range">Ages 35–50 · Urban professional · £65k–£130k household income</div>
+        <div class="jtbd-tags">
+          <span class="jtbd-tag">JTBD 01 · Reassurance</span>
+          <span class="jtbd-tag">JTBD 10 · NHS Gap-Fill</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="quote-block">
+          "I trust the NHS, I really do. But I'm 44 and I've never had a comprehensive check. My GP appointment took three weeks and lasted eight minutes. I'm not ill — I just want to know I'm not about to become ill."
+        </div>
+        <div class="detail-section">
+          <h4>Key Motivations</h4>
+          <ul>
+            <li>Time-poor; can't afford to take sick days or wait on long referral chains</li>
+            <li>Mild anxiety about being "fine now but silently not fine" — no baseline data</li>
+            <li>Has tried to get a 'health MOT' via NHS; was told there's no such thing unless symptomatic</li>
+            <li>Professional identity tied to being capable and on top of things — health is a blind spot</li>
+          </ul>
+        </div>
+        <div class="detail-section">
+          <h4>What They Reach For Today</h4>
+          <ul>
+            <li>Occasional private GP appointment for a specific concern</li>
+            <li>Nuffield / Bupa Executive Health Check (feels impersonal, expensive, one-off)</li>
+            <li>Thriva home blood test kits (useful but limited; no imaging)</li>
+          </ul>
+        </div>
+        <div class="neko-offer">
+          <h4>What Neko Offers Them</h4>
+          <p>A complete, non-radiological body scan in under 30 minutes — systemic, not symptomatic. It's the check-up the NHS doesn't provide and Bupa makes feel like a corporate benefit rather than personal care. The annual cadence fits their rhythm; the clean interface matches their professional standards.</p>
+        </div>
+        <div class="watch-out">
+          <h4>⚠ Watch Out</h4>
+          <p>If results surface an unexpected finding, this persona may not have a clear next step — they're in the NHS system and returning to it for follow-up is the same maze they were frustrated by. Neko needs a credible "what happens next" pathway or this persona's satisfaction turns to anxiety post-scan.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- UK 2 -->
+    <div class="persona-card uk">
+      <div class="card-header">
+        <div class="persona-num">UK Persona 02</div>
+        <h3>The Family History Carrier</h3>
+        <div class="age-range">Ages 40–55 · Parent or sibling with cancer or heart disease</div>
+        <div class="jtbd-tags">
+          <span class="jtbd-tag">JTBD 02 · Early Detection</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="quote-block">
+          "My mum was diagnosed with bowel cancer at 51. She said she felt completely fine right up until she didn't. I think about that constantly. I don't want to wait until I'm symptomatic."
+        </div>
+        <div class="detail-section">
+          <h4>Key Motivations</h4>
+          <ul>
+            <li>Visceral, personal motivation — a parent or sibling's diagnosis changed their calculus</li>
+            <li>Urgency is real and emotionally grounded, not anxiety-driven speculation</li>
+            <li>Wants to be a proactive patient, not a passive one; feels duty to family to stay well</li>
+            <li>NHS cancer screening programs start at 50–60; they feel unprotected in the gap</li>
+          </ul>
+        </div>
+        <div class="detail-section">
+          <h4>What They Reach For Today</h4>
+          <ul>
+            <li>Lobbying GP for earlier colonoscopy / mammography referral (often refused)</li>
+            <li>Genetic testing (Myriad, 23andMe health report) — BRCA, Lynch syndrome</li>
+            <li>Private oncology consultations; feels expensive and reactive rather than preventive</li>
+          </ul>
+        </div>
+        <div class="neko-offer">
+          <h4>What Neko Offers Them</h4>
+          <p>Annual whole-body scanning that catches morphological changes before symptoms appear. For this persona, Neko isn't a wellness luxury — it's a genuine early detection tool. The value proposition is simple and emotionally resonant: catch it early, when it's still fixable.</p>
+        </div>
+        <div class="watch-out">
+          <h4>⚠ Watch Out</h4>
+          <p>This is Neko's most clinically motivated user — they will scrutinise the scan's sensitivity and specificity for their specific cancer type. If Neko's scan doesn't image the organ they're most worried about (e.g., bowel), or if the AI-assisted interpretation glosses over their family-specific risk, they'll feel underserved. Transparency about what the scan does and doesn't detect is non-negotiable here.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- UK 3 -->
+    <div class="persona-card uk">
+      <div class="card-header">
+        <div class="persona-num">UK Persona 03</div>
+        <h3>The Longevity Optimizer</h3>
+        <div class="age-range">Ages 30–45 · Tech / finance / startup · Wearable power user</div>
+        <div class="jtbd-tags">
+          <span class="jtbd-tag">JTBD 05 · Longevity</span>
+          <span class="jtbd-tag">JTBD 09 · Wearable Data</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="quote-block">
+          "I've got 18 months of HRV data, my sleep score, my VO2 max estimate. But I have literally no idea what's actually happening inside my body. These numbers are proxies. I want the real data."
+        </div>
+        <div class="detail-section">
+          <h4>Key Motivations</h4>
+          <ul>
+            <li>Already embedded in the quantified self ecosystem: Oura, WHOOP, Apple Watch, Garmin</li>
+            <li>ZOE subscriber; has done a Thriva panel; reads Peter Attia's "Outlive"</li>
+            <li>Wants clinical-grade baseline data to anchor and contextualise wearable outputs</li>
+            <li>Health is an intellectual project as much as an anxiety response — they enjoy the data</li>
+          </ul>
+        </div>
+        <div class="detail-section">
+          <h4>What They Reach For Today</h4>
+          <ul>
+            <li>Regular Thriva / Medichecks blood panels (self-funded)</li>
+            <li>CGM trials (Libre, Dexcom) via ZOE or self-directed</li>
+            <li>Private GP for testosterone, thyroid, extended lipid panels</li>
+          </ul>
+        </div>
+        <div class="neko-offer">
+          <h4>What Neko Offers Them</h4>
+          <p>The imaging layer that's been missing from their stack. Neko's scan gives them morphological and cardiovascular data that no wearable or blood panel can provide. For this persona, Neko is less a reassurance product and more a data enrichment product — and the AI interpretation layer is what makes it sing. They want to understand trends, not just receive a PDF.</p>
+        </div>
+        <div class="watch-out">
+          <h4>⚠ Watch Out</h4>
+          <p>This is a sophisticated and demanding user. They'll compare Neko's output to Function Health's 100-biomarker panel and ask why they can't download their DICOM files. They want API integrations, trend graphs, and the ability to share data with their private GP. If the product feels closed or the AI explanations feel dumbed down, they'll be vocal critics. The AI/LLM experience is especially important here — it must be substantive, not just reassuring.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- UK 4 -->
+    <div class="persona-card uk">
+      <div class="card-header">
+        <div class="persona-num">UK Persona 04</div>
+        <h3>The Health Anxious</h3>
+        <div class="age-range">Ages 28–45 · High health awareness; anxiety tipping point varies</div>
+        <div class="jtbd-tags">
+          <span class="jtbd-tag">JTBD 01 · Reassurance</span>
+          <span class="jtbd-tag">JTBD 08 · Health Anxiety</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="quote-block">
+          "I know googling symptoms is a terrible idea and I do it anyway. The doctor says I'm fine but I don't believe her. I thought getting the scan would help but honestly I'm also scared of what it might find."
+        </div>
+        <div class="detail-section">
+          <h4>Key Motivations</h4>
+          <ul>
+            <li>Genuine desire for reassurance, but with a complicated relationship to the reassurance itself</li>
+            <li>Symptom-googling is compulsive; each clean result provides temporary relief then resets</li>
+            <li>Over-represented in preventive health spending — high motivation to seek products</li>
+            <li>A clean scan result is enormously valuable to them… until a new symptom appears</li>
+          </ul>
+        </div>
+        <div class="detail-section">
+          <h4>What They Reach For Today</h4>
+          <ul>
+            <li>NHS GP appointments "just to check" — often given reassurance but leaves unsatisfied</li>
+            <li>Health anxiety forums and Reddit communities</li>
+            <li>Multiple at-home test kits (stool, blood, urine) with limited interpretive support</li>
+          </ul>
+        </div>
+        <div class="neko-offer">
+          <h4>What Neko Offers Them</h4>
+          <p>A credible, clinically-grounded baseline that is harder to dismiss than a GP's verbal reassurance. "Your scan shows no abnormalities" lands differently than "you seem fine to me." The annual cadence also provides a natural reset point. The AI layer, if well-designed, can deliver reassurance in a tone that is measured and grounding rather than alarming.</p>
+        </div>
+        <div class="watch-out">
+          <h4>⚠ Watch Out</h4>
+          <p>This is Neko's most ethically complex persona. A scan that returns any ambiguous finding — even a routine "watch and wait" — can significantly worsen health anxiety. The AI/LLM interpretation layer carries enormous responsibility: it must contextualise incidental findings carefully, avoid catastrophising language, and know when to gently redirect to clinical support. Over-servicing this persona's anxiety without a clinical safety net is a product risk as well as a moral one.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- UK 5 -->
+    <div class="persona-card uk">
+      <div class="card-header">
+        <div class="persona-num">UK Persona 05</div>
+        <h3>The Skin-Aware</h3>
+        <div class="age-range">Ages 25–60 · Had a mole scare, family history of melanoma, or sun-damaged skin</div>
+        <div class="jtbd-tags">
+          <span class="jtbd-tag">JTBD 03 · Skin Monitoring</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="quote-block">
+          "I asked my GP about a mole I was worried about. She said it looked fine but referred me to dermatology 'just to be safe.' That was eight months ago. I'm still waiting."
+        </div>
+        <div class="detail-section">
+          <h4>Key Motivations</h4>
+          <ul>
+            <li>Specific, concrete concern rather than general health anxiety</li>
+            <li>NHS dermatology wait times are a genuine system failure — 3–6 months for non-urgent</li>
+            <li>Often motivated by a past scare, family history (melanoma), or return from sunny climate</li>
+            <li>Wants ongoing monitoring, not a one-off assessment — skin changes over time</li>
+          </ul>
+        </div>
+        <div class="detail-section">
+          <h4>What They Reach For Today</h4>
+          <ul>
+            <li>At-home skin analysis apps (SkinVision, Miiskin) — useful but non-clinical</li>
+            <li>Private dermatology consultation (£150–£300 per visit; sporadic)</li>
+            <li>Self-monitoring with photography; no baseline or change-detection capability</li>
+          </ul>
+        </div>
+        <div class="neko-offer">
+          <h4>What Neko Offers Them</h4>
+          <p>Full-body skin scanning with AI-assisted mole analysis as part of a wider health check — not a standalone triage product but an integrated one. The annual cadence enables change detection. For this persona, the skin component may actually be the entry point that brings them to Neko, but the whole-body scan is what retains them.</p>
+        </div>
+        <div class="watch-out">
+          <h4>⚠ Watch Out</h4>
+          <p>Expectations around skin scanning are high — and clinically, dermatology AI has a well-documented bias problem around darker skin tones. If Neko's skin scanning feature doesn't perform equitably across skin types, or if the AI flags something that turns out to be benign after a £250 private dermatology follow-up, trust erodes fast. This persona needs a clear, credible referral pathway if something is flagged.</p>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /uk persona-grid -->
+</div><!-- /container -->
+
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!--  US PERSONAS                                       -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="container">
+  <div class="section-header us">
+    <div class="market-label"><span class="flag">🇺🇸</span> United States — NYC Launch Market</div>
+    <h2>US Persona Profiles</h2>
+    <p>Early adopters shaped by the longevity culture, insurance frustration, biohacking identity, and significantly higher willingness to pay for premium health experiences.</p>
+  </div>
+  <div class="section-divider us"></div>
+
+  <div class="persona-grid us">
+
+    <!-- US 1 -->
+    <div class="persona-card us">
+      <div class="card-header">
+        <div class="persona-num">US Persona 01</div>
+        <h3>The Proactive Executive</h3>
+        <div class="age-range">Ages 40–55 · NYC/SF/LA · $200k–$500k+ HHI · C-suite or partner track</div>
+        <div class="jtbd-tags">
+          <span class="jtbd-tag">JTBD 01 · Reassurance</span>
+          <span class="jtbd-tag">JTBD 05 · Longevity</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="quote-block">
+          "I optimise everything in my life. My diet, my sleep, my workouts, my calendar. But I realised I had no idea what was actually happening inside my body. That felt like an obvious gap to fix."
+        </div>
+        <div class="detail-section">
+          <h4>Key Motivations</h4>
+          <ul>
+            <li>Control orientation — health is just another domain to optimise systematically</li>
+            <li>Time is their scarcest resource; sub-30-minute scan is a genuine differentiator</li>
+            <li>Already pays for concierge medicine ($3k–$10k/yr) but it's reactive, not imaging-based</li>
+            <li>Health as executive fitness — being on top of this signals competence and longevity</li>
+          </ul>
+        </div>
+        <div class="detail-section">
+          <h4>What They Reach For Today</h4>
+          <ul>
+            <li>Concierge primary care (One Medical, Atria Health, MDVIP) for same-day access</li>
+            <li>Executive physicals at Cleveland Clinic or Johns Hopkins (~$3,000–$5,000)</li>
+            <li>Full-body MRI scans via Prenuvo ($2,500 one-off) — Neko's direct competitor</li>
+          </ul>
+        </div>
+        <div class="neko-offer">
+          <h4>What Neko Offers Them</h4>
+          <p>A compelling price-to-comprehensiveness ratio: $400–500/year vs $2,500 for a Prenuvo MRI, with a faster turnaround and a technology-forward experience that aligns with their identity. The annual membership model fits their preference for subscriptions over one-off transactions. Neko's Spotify provenance also resonates as a marker of product sophistication.</p>
+        </div>
+        <div class="watch-out">
+          <h4>⚠ Watch Out</h4>
+          <p>This persona is accustomed to white-glove service. If Neko's NYC clinic feels clinical rather than premium, or if the digital experience feels behind their concierge medicine app, they'll leave. They're also likely to push for full MRI capability — Neko's non-radiological approach needs a confident, articulate answer for why that's sufficient or even advantageous. Customer success matters as much as the product itself.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- US 2 -->
+    <div class="persona-card us">
+      <div class="card-header">
+        <div class="persona-num">US Persona 02</div>
+        <h3>The Longevity-Optimised Biohacker</h3>
+        <div class="age-range">Ages 30–45 · Tech or finance · Podcast listener · Stack-builder</div>
+        <div class="jtbd-tags">
+          <span class="jtbd-tag">JTBD 05 · Longevity</span>
+          <span class="jtbd-tag">JTBD 09 · Wearable Data</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="quote-block">
+          "I'm a Function Health member, I use Levels CGM, I've done a DEXA scan, I do zone 2 four times a week. I read Outlive twice. I want Neko to be my imaging layer. What does my scan actually look like?"
+        </div>
+        <div class="detail-section">
+          <h4>Key Motivations</h4>
+          <ul>
+            <li>Has a sophisticated mental model of health biomarkers — ApoB, Lp(a), CAC scoring</li>
+            <li>Already spending $2,000–$5,000/year across health optimisation products</li>
+            <li>Sees Neko as filling the imaging gap that blood panels and wearables can't reach</li>
+            <li>Interested in longitudinal data — how does their arterial health change year on year?</li>
+          </ul>
+        </div>
+        <div class="detail-section">
+          <h4>What They Reach For Today</h4>
+          <ul>
+            <li>Function Health ($499/yr) for 100+ biomarker blood panels</li>
+            <li>Levels or Nutrisense CGM for metabolic health tracking</li>
+            <li>Prenuvo full-body MRI (one-off, $2,500) for imaging baseline</li>
+          </ul>
+        </div>
+        <div class="neko-offer">
+          <h4>What Neko Offers Them</h4>
+          <p>The annual imaging layer at a fraction of Prenuvo's cost, integrated into their existing stack. The AI interpretation layer must speak their language — CIMT, cardiac output, adipose tissue distribution — not just "everything looks normal." This persona will test the AI's depth immediately. If it holds up, they become Neko's most powerful word-of-mouth advocates (they literally podcast about their health stack).</p>
+        </div>
+        <div class="watch-out">
+          <h4>⚠ Watch Out</h4>
+          <p>Extremely high expectations for data access and interoperability. They will ask: Can I download my DICOM files? Can Neko integrate with Apple Health? Can I share results with my concierge GP? Can I see trends across years? If Neko's data ecosystem is closed, this persona feels locked out of their own health data — a dealbreaker. The AI/LLM UX needs to be genuinely intelligent, not a chatbot wrapper on a PDF.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- US 3 -->
+    <div class="persona-card us">
+      <div class="card-header">
+        <div class="persona-num">US Persona 03</div>
+        <h3>The Family History Carrier (US)</h3>
+        <div class="age-range">Ages 38–55 · Has done 23andMe or Ambry genetics panel · Insurance-aware</div>
+        <div class="jtbd-tags">
+          <span class="jtbd-tag">JTBD 02 · Early Detection</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="quote-block">
+          "My dad had a heart attack at 54. My insurance covers a colonoscopy at 45 — that's it. I asked about a cardiac scan and they said it wasn't medically necessary. I'll pay out of pocket. This is my life."
+        </div>
+        <div class="detail-section">
+          <h4>Key Motivations</h4>
+          <ul>
+            <li>Motivated by lived experience of watching a family member's health crisis</li>
+            <li>Frustrated by insurance gatekeeping on preventive imaging ("not medically necessary")</li>
+            <li>More likely than UK equivalent to have done genetic testing (23andMe, Invitae)</li>
+            <li>Willing to pay out of pocket specifically because insurance has failed them on this</li>
+          </ul>
+        </div>
+        <div class="detail-section">
+          <h4>What They Reach For Today</h4>
+          <ul>
+            <li>Direct-to-consumer cardiac screenings (Life Line Screening, ~$150)</li>
+            <li>Calcium scoring CT scan ($75–$200 out of pocket — if they know it exists)</li>
+            <li>Genetic counselling and testing to understand inherited risk</li>
+          </ul>
+        </div>
+        <div class="neko-offer">
+          <h4>What Neko Offers Them</h4>
+          <p>A comprehensive annual scan that doesn't require insurance pre-authorisation or a physician referral. The "just book it" accessibility is a major selling point for someone who has hit walls with their insurer. Neko is the system end-run — the thing they can actually do, now, without waiting for bureaucratic permission. Family history context in the AI interpretation layer would be particularly meaningful here.</p>
+        </div>
+        <div class="watch-out">
+          <h4>⚠ Watch Out</h4>
+          <p>This persona has high expectations about what specifically the scan covers. If their worry is cardiac and Neko's cardiac imaging is less thorough than a dedicated echo or CAC scan, they'll feel misled. The US market also has strong liability awareness — any language that suggests Neko is a diagnostic tool (vs screening/monitoring) creates FDA regulatory exposure and may deter clinicians from engaging with Neko results.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- US 4 -->
+    <div class="persona-card us">
+      <div class="card-header">
+        <div class="persona-num">US Persona 04</div>
+        <h3>The Uninsured / Self-Insured Optimizer</h3>
+        <div class="age-range">Ages 30–50 · Entrepreneur, freelancer, or self-employed · No employer health plan</div>
+        <div class="jtbd-tags">
+          <span class="jtbd-tag">JTBD 01 · Reassurance</span>
+          <span class="jtbd-tag">JTBD 10 · System Gap-Fill (US)</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="quote-block">
+          "I have a catastrophic plan with a $7,000 deductible. Preventive care is basically on me. I think of Neko as an investment — way cheaper than what it would cost to catch something late."
+        </div>
+        <div class="detail-section">
+          <h4>Key Motivations</h4>
+          <ul>
+            <li>Structurally similar to UK's NHS-frustrated professional but for opposite reasons</li>
+            <li>No employer-sponsored plan; prevention spending comes entirely out of pocket or HSA/FSA</li>
+            <li>ROI framing: Neko as cheap insurance against a catastrophic out-of-pocket treatment cost</li>
+            <li>Entrepreneurial mindset — tends toward direct action rather than bureaucratic navigation</li>
+          </ul>
+        </div>
+        <div class="detail-section">
+          <h4>What They Reach For Today</h4>
+          <ul>
+            <li>Direct primary care (DPC) memberships (~$100/mo) for affordable primary access</li>
+            <li>HSA-funded labs and imaging; motivated to use that money strategically</li>
+            <li>Function Health or Everlywell panels — DTC blood testing without physician gating</li>
+          </ul>
+        </div>
+        <div class="neko-offer">
+          <h4>What Neko Offers Them</h4>
+          <p>An affordable, comprehensive annual screen that fits the "invest in your health, not in your sickness" mindset. HSA/FSA eligibility would be a significant conversion driver for this persona — make it clear upfront. The membership framing also appeals: they're already in a DPC model, they understand subscription healthcare. Neko is the imaging equivalent of their DPC relationship.</p>
+        </div>
+        <div class="watch-out">
+          <h4>⚠ Watch Out</h4>
+          <p>Pricing sensitivity is real even among higher earners in this segment. If Neko's NYC pricing lands at $600–800 without HSA eligibility clarity, this persona does the math and hesitates. They're also likely to want Neko to replace rather than supplement their care model — a risk if Neko's scope is narrower than they expect. Clear scope communication upfront prevents disappointment.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- US 5 -->
+    <div class="persona-card us">
+      <div class="card-header">
+        <div class="persona-num">US Persona 05</div>
+        <h3>The Wearable Power User</h3>
+        <div class="age-range">Ages 28–45 · Apple Watch / Oura user · Something got flagged</div>
+        <div class="jtbd-tags">
+          <span class="jtbd-tag">JTBD 09 · Wearable Interpretation</span>
+          <span class="jtbd-tag">JTBD 04 · Data Interpretation</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="quote-block">
+          "My Apple Watch has been showing irregular rhythm notifications for three weeks. My doctor said it's probably nothing, ordered an ECG, said it was fine. But it's still doing it. I want a real answer, not another app."
+        </div>
+        <div class="detail-section">
+          <h4>Key Motivations</h4>
+          <ul>
+            <li>A wearable has surfaced a signal they can't get the medical system to take seriously</li>
+            <li>Frustrated by the gap between consumer-grade sensing and clinical validation</li>
+            <li>Wants a human-in-the-loop interpretation that goes beyond "algorithm says watch this"</li>
+            <li>Not necessarily health-anxious — more technically curious and legitimately concerned</li>
+          </ul>
+        </div>
+        <div class="detail-section">
+          <h4>What They Reach For Today</h4>
+          <ul>
+            <li>Cardiologist referral (wait times 2–4 weeks; often requires PCP gatekeeping)</li>
+            <li>KardiaMobile personal ECG device ($99) for more granular self-monitoring</li>
+            <li>Reddit and health forums trying to contextualise their specific readings</li>
+          </ul>
+        </div>
+        <div class="neko-offer">
+          <h4>What Neko Offers Them</h4>
+          <p>Clinical-grade cardiovascular and structural imaging that can actually validate or contextualise what the wearable is detecting. The AI/LLM interpretation layer is the centrepiece for this persona — they want a clear, authoritative explanation of what the scan found in relation to their wearable signal. Neko bridges the gap between consumer sensing and clinical certainty better than any other product in this category.</p>
+        </div>
+        <div class="watch-out">
+          <h4>⚠ Watch Out</h4>
+          <p>High expectations for wearable data integration. If Neko can't receive or contextualise their Apple Health or Oura data at intake, the "bring your wearable context" experience falls flat. This persona also needs a clear, confident clinical escalation path — if Neko's scan does confirm something the wearable was flagging, the referral pathway must be immediate and reliable. Being the product that confirms a cardiac finding with no clinical handoff is a serious liability.</p>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /us persona-grid -->
+</div><!-- /container -->
+
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!--  JTBD COMPARISON TABLE                            -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="container">
+  <div class="table-section">
+    <h2>JTBD Market Comparison</h2>
+    <p class="table-subtitle">Which Jobs-to-Be-Done are strongest in each market — and the strategic implications for product and AI layer design.</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>JTBD</th>
+          <th>Description</th>
+          <th>🇬🇧 UK Strength</th>
+          <th>🇺🇸 US Strength</th>
+          <th>AI/LLM Implication</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>JTBD 01</td>
+          <td>Health reassurance &amp; peace of mind</td>
+          <td>
+            <div class="strength-cell">
+              <div class="strength-dots">
+                <div class="dot filled-uk"></div>
+                <div class="dot filled-uk"></div>
+                <div class="dot filled-uk"></div>
+                <div class="dot filled-uk"></div>
+                <div class="dot empty"></div>
+              </div>
+              <span class="strength-label">Strong</span>
+            </div>
+          </td>
+          <td>
+            <div class="strength-cell">
+              <div class="strength-dots">
+                <div class="dot filled-us"></div>
+                <div class="dot filled-us"></div>
+                <div class="dot filled-us"></div>
+                <div class="dot empty"></div>
+                <div class="dot empty"></div>
+              </div>
+              <span class="strength-label">Moderate</span>
+            </div>
+          </td>
+          <td>Tone calibration is critical; UK users need calm reassurance, US want data context</td>
+        </tr>
+        <tr>
+          <td>JTBD 02</td>
+          <td>Family history / early detection urgency</td>
+          <td>
+            <div class="strength-cell">
+              <div class="strength-dots">
+                <div class="dot filled-uk"></div>
+                <div class="dot filled-uk"></div>
+                <div class="dot filled-uk"></div>
+                <div class="dot filled-uk"></div>
+                <div class="dot filled-uk"></div>
+              </div>
+              <span class="strength-label">Very Strong</span>
+            </div>
+          </td>
+          <td>
+            <div class="strength-cell">
+              <div class="strength-dots">
+                <div class="dot filled-us"></div>
+                <div class="dot filled-us"></div>
+                <div class="dot filled-us"></div>
+                <div class="dot filled-us"></div>
+                <div class="dot filled-us"></div>
+              </div>
+              <span class="strength-label">Very Strong</span>
+            </div>
+          </td>
+          <td>Allow users to input family history at intake; AI should reference it in interpretation</td>
+        </tr>
+        <tr>
+          <td>JTBD 03</td>
+          <td>Skin / mole monitoring</td>
+          <td>
+            <div class="strength-cell">
+              <div class="strength-dots">
+                <div class="dot filled-uk"></div>
+                <div class="dot filled-uk"></div>
+                <div class="dot filled-uk"></div>
+                <div class="dot filled-uk"></div>
+                <div class="dot empty"></div>
+              </div>
+              <span class="strength-label">Strong</span>
+            </div>
+          </td>
+          <td>
+            <div class="strength-cell">
+              <div class="strength-dots">
+                <div class="dot filled-us"></div>
+                <div class="dot filled-us"></div>
+                <div class="dot filled-us"></div>
+                <div class="dot empty"></div>
+                <div class="dot empty"></div>
+              </div>
+              <span class="strength-label">Moderate</span>
+            </div>
+          </td>
+          <td>UK: NHS dermatology gap makes this acute. US: DTC derm apps already compete. Change-tracking AI matters</td>
+        </tr>
+        <tr>
+          <td>JTBD 04</td>
+          <td>Data interpretation ("what do my results mean?")</td>
+          <td>
+            <div class="strength-cell">
+              <div class="strength-dots">
+                <div class="dot filled-uk"></div>
+                <div class="dot filled-uk"></div>
+                <div class="dot filled-uk"></div>
+                <div class="dot empty"></div>
+                <div class="dot empty"></div>
+              </div>
+              <span class="strength-label">Moderate</span>
+            </div>
+          </td>
+          <td>
+            <div class="strength-cell">
+              <div class="strength-dots">
+                <div class="dot filled-us"></div>
+                <div class="dot filled-us"></div>
+                <div class="dot filled-us"></div>
+                <div class="dot filled-us"></div>
+                <div class="dot filled-us"></div>
+              </div>
+              <span class="strength-label">Very Strong</span>
+            </div>
+          </td>
+          <td>Core AI use case for US market. Needs layered depth: plain English + clinical detail mode</td>
+        </tr>
+        <tr>
+          <td>JTBD 05</td>
+          <td>Longevity &amp; healthspan optimisation</td>
+          <td>
+            <div class="strength-cell">
+              <div class="strength-dots">
+                <div class="dot filled-uk"></div>
+                <div class="dot filled-uk"></div>
+                <div class="dot filled-uk"></div>
+                <div class="dot empty"></div>
+                <div class="dot empty"></div>
+              </div>
+              <span class="strength-label">Moderate</span>
+            </div>
+          </td>
+          <td>
+            <div class="strength-cell">
+              <div class="strength-dots">
+                <div class="dot filled-us"></div>
+                <div class="dot filled-us"></div>
+                <div class="dot filled-us"></div>
+                <div class="dot filled-us"></div>
+                <div class="dot filled-us"></div>
+              </div>
+              <span class="strength-label">Very Strong</span>
+            </div>
+          </td>
+          <td>US users want trend lines, not snapshots. Longitudinal AI features are a key differentiator</td>
+        </tr>
+        <tr>
+          <td>JTBD 08</td>
+          <td>Health anxiety management</td>
+          <td>
+            <div class="strength-cell">
+              <div class="strength-dots">
+                <div class="dot filled-uk"></div>
+                <div class="dot filled-uk"></div>
+                <div class="dot filled-uk"></div>
+                <div class="dot filled-uk"></div>
+                <div class="dot empty"></div>
+              </div>
+              <span class="strength-label">Strong</span>
+            </div>
+          </td>
+          <td>
+            <div class="strength-cell">
+              <div class="strength-dots">
+                <div class="dot filled-us"></div>
+                <div class="dot filled-us"></div>
+                <div class="dot empty"></div>
+                <div class="dot empty"></div>
+                <div class="dot empty"></div>
+              </div>
+              <span class="strength-label">Lower</span>
+            </div>
+          </td>
+          <td>AI must have safety rails for anxiety amplification. Incidental finding communication is a product design decision, not just a copy decision</td>
+        </tr>
+        <tr>
+          <td>JTBD 09</td>
+          <td>Wearable data interpretation</td>
+          <td>
+            <div class="strength-cell">
+              <div class="strength-dots">
+                <div class="dot filled-uk"></div>
+                <div class="dot filled-uk"></div>
+                <div class="dot filled-uk"></div>
+                <div class="dot empty"></div>
+                <div class="dot empty"></div>
+              </div>
+              <span class="strength-label">Moderate</span>
+            </div>
+          </td>
+          <td>
+            <div class="strength-cell">
+              <div class="strength-dots">
+                <div class="dot filled-us"></div>
+                <div class="dot filled-us"></div>
+                <div class="dot filled-us"></div>
+                <div class="dot filled-us"></div>
+                <div class="dot empty"></div>
+              </div>
+              <span class="strength-label">Strong</span>
+            </div>
+          </td>
+          <td>Wearable data integration at intake is table stakes for US biohacker segment; AI must surface cross-signal insights</td>
+        </tr>
+        <tr>
+          <td>JTBD 10</td>
+          <td>System gap-filling (NHS / insurance)</td>
+          <td>
+            <div class="strength-cell">
+              <div class="strength-dots">
+                <div class="dot filled-uk"></div>
+                <div class="dot filled-uk"></div>
+                <div class="dot filled-uk"></div>
+                <div class="dot filled-uk"></div>
+                <div class="dot filled-uk"></div>
+              </div>
+              <span class="strength-label">Defining</span>
+            </div>
+          </td>
+          <td>
+            <div class="strength-cell">
+              <div class="strength-dots">
+                <div class="dot filled-us"></div>
+                <div class="dot filled-us"></div>
+                <div class="dot filled-us"></div>
+                <div class="dot empty"></div>
+                <div class="dot empty"></div>
+              </div>
+              <span class="strength-label">Moderate</span>
+            </div>
+          </td>
+          <td>UK: Neko IS the alternative to NHS. US: one of many private options. Messaging must differ significantly by market</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ───────────────────────────────── FOOTER ── -->
+<div class="page-footer">
+  Prepared for Principal PM – AI/LLM Interview · Neko Health &nbsp;·&nbsp; Based on JTBD analysis across UK &amp; US preventive health markets &nbsp;·&nbsp; April 2026
+</div>
+
+</body>
+</html>

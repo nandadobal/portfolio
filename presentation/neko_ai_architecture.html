@@ -1,0 +1,1350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Building Neko's Health Intelligence</title>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg: #F8F6F1;
+            --bg-card: #FFFFFF;
+            --border: #D8D4C8;
+            --accent: #4A6550;
+            --accent-dim: rgba(74, 101, 80, 0.14);
+            --accent-subtle: rgba(74, 101, 80, 0.07);
+            --text-heading: #1A1C19;
+            --text-body: #4A4C49;
+            --text-bright: #2A2C29;
+            --text-muted: #8A8C89;
+            --proximate: #2B5F8A;
+            --proximate-dim: rgba(43, 95, 138, 0.08);
+            --distal: #6B4E8A;
+            --distal-dim: rgba(107, 78, 138, 0.07);
+            --radius: 12px;
+            --radius-sm: 8px;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text-body);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            font-size: 15px;
+            line-height: 1.65;
+        }
+
+        /* NAV */
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: #2C3E30;
+            padding: 0 48px;
+            display: flex;
+            align-items: center;
+            gap: 32px;
+            height: 52px;
+            overflow-x: auto;
+        }
+
+        .nav-logo {
+            color: #FFFFFF;
+            font-weight: 700;
+            font-size: 13px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            margin-right: auto;
+            text-decoration: none;
+        }
+
+        nav a {
+            color: #AABDAC;
+            text-decoration: none;
+            font-size: 12px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            white-space: nowrap;
+            transition: color 0.15s;
+        }
+
+        nav a:hover { color: #FFFFFF; }
+
+        .nav-sep { color: #3D5040; font-size: 14px; }
+
+        /* LAYOUT */
+        main {
+            max-width: 1080px;
+            margin: 0 auto;
+            padding: 0 48px 100px;
+        }
+
+        section { padding-top: 80px; }
+
+        .section-label {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1.8px;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 14px;
+        }
+
+        h1 {
+            font-size: 44px;
+            font-weight: 700;
+            color: var(--text-heading);
+            line-height: 1.15;
+            letter-spacing: -0.5px;
+        }
+
+        h2 {
+            font-size: 24px;
+            font-weight: 650;
+            color: var(--text-heading);
+            line-height: 1.3;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: var(--text-body);
+            margin-top: 18px;
+            max-width: 580px;
+            line-height: 1.75;
+        }
+
+        .section-desc {
+            font-size: 14px;
+            color: var(--text-body);
+            max-width: 680px;
+            margin-bottom: 0;
+            line-height: 1.7;
+        }
+
+        /* HERO */
+        #hero {
+            padding-top: 60px;
+            padding-bottom: 60px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .hero-tag {
+            display: inline-block;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 16px;
+        }
+
+        /* PIPELINE */
+        .pipeline-wrap {
+            margin-top: 40px;
+            overflow-x: auto;
+            padding-bottom: 4px;
+        }
+
+        .pipeline {
+            display: flex;
+            align-items: flex-start;
+            min-width: 860px;
+        }
+
+        .pipeline-node {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            flex: 1;
+            min-width: 110px;
+            padding: 0 4px;
+        }
+
+        .pipeline-icon {
+            width: 50px; height: 50px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            margin-bottom: 10px;
+            transition: border-color 0.2s, background 0.2s;
+            cursor: default;
+        }
+
+        .pipeline-node:hover .pipeline-icon {
+            border-color: var(--accent);
+            background: var(--accent-subtle);
+        }
+
+        .pipeline-node-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-bright);
+            margin-bottom: 4px;
+            line-height: 1.3;
+        }
+
+        .pipeline-node-desc {
+            font-size: 10px;
+            color: var(--text-muted);
+            line-height: 1.45;
+        }
+
+        .pipeline-arrow {
+            display: flex;
+            align-items: flex-start;
+            padding-top: 16px;
+            color: var(--text-muted);
+            font-size: 14px;
+            flex-shrink: 0;
+            width: 20px;
+            justify-content: center;
+        }
+
+        /* HEALTH CONTEXT OBJECT */
+        .context-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            margin-top: 36px;
+            overflow: hidden;
+        }
+
+        .context-card-header {
+            padding: 16px 24px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .context-card-header-dot {
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            background: var(--accent);
+        }
+
+        .context-card-header-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-muted);
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+        }
+
+        .context-card-header-member {
+            margin-left: auto;
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .context-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+        }
+
+        .context-col {
+            padding: 22px 24px;
+            border-right: 1px solid var(--border);
+        }
+
+        .context-col:last-child { border-right: none; }
+
+        .context-col-title {
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 1.4px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 14px;
+        }
+
+        .biomarker-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 7px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .biomarker-row:last-child { border-bottom: none; }
+
+        .bm-name { font-size: 12px; color: var(--text-body); }
+
+        .bm-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .bm-value { font-size: 12px; font-weight: 600; color: var(--text-bright); }
+
+        .delta {
+            font-size: 10px;
+            font-weight: 600;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .d-up   { color: #8B2E2E; background: #FDF0F0; }
+        .d-down { color: #2C6B35; background: #E8F5EC; }
+        .d-flat { color: var(--text-muted); background: rgba(100,116,139,0.08); }
+
+        .finding-row {
+            display: flex;
+            gap: 10px;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .finding-row:last-child { border-bottom: none; }
+
+        .finding-dot {
+            width: 7px; height: 7px;
+            border-radius: 50%;
+            margin-top: 5px;
+            flex-shrink: 0;
+        }
+
+        .dot-flag  { background: #C0392B; }
+        .dot-watch { background: #D4850A; }
+        .dot-good  { background: #4A6550; }
+
+        .finding-label {
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            margin-bottom: 3px;
+        }
+
+        .fl-flag  { color: #8B2E2E; }
+        .fl-watch { color: #8B5E0A; }
+        .fl-good  { color: #2C6B35; }
+
+        .finding-text { font-size: 11px; color: var(--text-body); line-height: 1.45; }
+
+        .risk-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 7px 0;
+            border-bottom: 1px solid var(--border);
+            gap: 10px;
+        }
+
+        .risk-row:last-child { border-bottom: none; }
+
+        .risk-name { font-size: 12px; color: var(--text-body); }
+
+        .risk-bar-outer {
+            flex: 1;
+            height: 4px;
+            background: var(--border);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .risk-bar-inner { height: 100%; border-radius: 2px; }
+
+        .risk-level { font-size: 10px; font-weight: 600; width: 42px; text-align: right; }
+
+        /* TOOLS VS RAG */
+        .intelligence-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+            margin-top: 36px;
+        }
+
+        .intel-card {
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+
+        .intel-card-header {
+            padding: 18px 22px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid;
+        }
+
+        .intel-icon {
+            width: 36px; height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        .intel-card-name {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+
+        .intel-card-sub { font-size: 11px; color: var(--text-muted); }
+
+        .intel-card-body { padding: 18px 22px; }
+
+        .intel-analogy {
+            font-size: 13px;
+            line-height: 1.65;
+            margin-bottom: 18px;
+            font-style: italic;
+            color: var(--text-body);
+        }
+
+        .intel-examples-label {
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 1.4px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .intel-example {
+            padding: 9px 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 12px;
+            line-height: 1.5;
+            color: var(--text-body);
+        }
+
+        .intel-example:last-child { border-bottom: none; }
+
+        .intel-example-fn {
+            font-family: 'SF Mono', 'Fira Code', 'Courier New', monospace;
+            font-size: 11px;
+            font-weight: 600;
+            margin-bottom: 3px;
+        }
+
+        .intel-example-desc { font-size: 11px; color: var(--text-muted); }
+
+        .intel-summary {
+            margin-top: 16px;
+            padding: 10px 14px;
+            border-radius: var(--radius-sm);
+            font-size: 12px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .intel-card.rag {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+        }
+
+        .intel-card.rag .intel-card-header { border-bottom-color: var(--border); }
+        .intel-card.rag .intel-icon { background: rgba(0,212,168,0.08); border: 1px solid rgba(0,212,168,0.18); }
+        .intel-card.rag .intel-card-name { color: var(--accent); }
+        .intel-card.rag .intel-examples-label { color: var(--accent); }
+        .intel-card.rag .intel-summary { background: var(--accent-dim); color: var(--accent); }
+
+        .intel-card.tools {
+            background: rgba(43,95,138,0.05);
+            border: 1px solid rgba(43,95,138,0.16);
+        }
+
+        .intel-card.tools .intel-card-header { border-bottom-color: rgba(43,95,138,0.14); }
+        .intel-card.tools .intel-icon { background: rgba(43,95,138,0.1); border: 1px solid rgba(43,95,138,0.2); }
+        .intel-card.tools .intel-card-name { color: var(--proximate); }
+        .intel-card.tools .intel-examples-label { color: var(--proximate); }
+        .intel-card.tools .intel-example { border-bottom-color: rgba(43,95,138,0.12); }
+        .intel-card.tools .intel-example-fn { color: #1E4A6E; }
+        .intel-card.tools .intel-summary { background: var(--proximate-dim); color: var(--proximate); }
+
+        .why-both {
+            margin-top: 18px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 22px 26px;
+            display: flex;
+            gap: 18px;
+            align-items: flex-start;
+        }
+
+        .why-both-icon { font-size: 22px; flex-shrink: 0; margin-top: 1px; }
+
+        .why-both-label {
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 1.4px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .why-both p { font-size: 13px; color: var(--text-bright); line-height: 1.75; }
+        .why-both strong { color: var(--accent); font-weight: 600; }
+
+        /* TRIGGERS */
+        .triggers-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+            margin-top: 36px;
+        }
+
+        .trigger-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+
+        .trigger-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .trigger-icon {
+            width: 34px; height: 34px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            flex-shrink: 0;
+        }
+
+        .trigger-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-heading);
+            margin-bottom: 2px;
+        }
+
+        .trigger-fires { font-size: 11px; color: var(--text-muted); }
+
+        .trigger-body { padding: 16px 20px; }
+
+        .insight-block {
+            background: var(--accent-subtle);
+            border: 1px solid rgba(0,212,168,0.14);
+            border-radius: var(--radius-sm);
+            padding: 11px 13px;
+            margin-bottom: 13px;
+        }
+
+        .insight-label {
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 5px;
+        }
+
+        .insight-text {
+            font-size: 12px;
+            color: var(--text-bright);
+            line-height: 1.55;
+            font-style: italic;
+        }
+
+        .outcome-row {
+            display: flex;
+            gap: 8px;
+        }
+
+        .outcome-block {
+            flex: 1;
+            border-radius: var(--radius-sm);
+            padding: 10px 12px;
+        }
+
+        .outcome-block.prox {
+            background: var(--proximate-dim);
+            border: 1px solid rgba(96,165,250,0.18);
+        }
+
+        .outcome-block.dist {
+            background: var(--distal-dim);
+            border: 1px dashed rgba(167,139,250,0.25);
+        }
+
+        .outcome-label {
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .outcome-label.prox { color: var(--proximate); }
+        .outcome-label.dist { color: var(--distal); }
+
+        .outcome-text { font-size: 11px; line-height: 1.45; }
+        .outcome-text.prox { color: #1E4A6E; }
+        .outcome-text.dist { color: #4E3570; }
+
+        /* COMPARISON */
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+            margin-top: 36px;
+        }
+
+        .comp-card {
+            border-radius: var(--radius);
+            padding: 24px;
+        }
+
+        .comp-card.general {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+        }
+
+        .comp-card.neko {
+            background: var(--accent-subtle);
+            border: 1px solid rgba(0,212,168,0.18);
+        }
+
+        .comp-label {
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 14px;
+        }
+
+        .comp-label.general { color: var(--text-muted); }
+        .comp-label.neko    { color: var(--accent); }
+
+        .comp-question {
+            font-size: 13px;
+            font-style: italic;
+            color: var(--text-muted);
+            padding: 10px 13px;
+            background: rgba(0,0,0,0.03);
+            border-left: 2px solid var(--border);
+            border-radius: 0 6px 6px 0;
+            margin-bottom: 16px;
+        }
+
+        .comp-response {
+            font-size: 13px;
+            line-height: 1.75;
+        }
+
+        .comp-response.general { color: var(--text-body); }
+        .comp-response.neko    { color: var(--text-bright); }
+        .comp-response.neko strong { color: var(--accent); font-weight: 600; }
+
+        /* EVAL */
+        .eval-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+            margin-top: 36px;
+        }
+
+        .eval-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 22px 24px;
+        }
+
+        .eval-card-title {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            margin-bottom: 18px;
+        }
+
+        .eval-item {
+            display: flex;
+            gap: 13px;
+            padding: 11px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .eval-item:last-child { border-bottom: none; }
+
+        .eval-dot {
+            width: 5px; height: 5px;
+            border-radius: 50%;
+            background: var(--accent);
+            margin-top: 7px;
+            flex-shrink: 0;
+        }
+
+        .eval-metric {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-bright);
+            margin-bottom: 3px;
+        }
+
+        .eval-desc {
+            font-size: 11px;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .hard-problem {
+            margin-top: 22px;
+            background: rgba(107,78,138,0.05);
+            border: 1px dashed rgba(107,78,138,0.22);
+            border-radius: var(--radius-sm);
+            padding: 18px 22px;
+        }
+
+        .hard-problem-label {
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 1.4px;
+            text-transform: uppercase;
+            color: var(--distal);
+            margin-bottom: 10px;
+        }
+
+        .hard-problem p {
+            font-size: 13px;
+            color: #4E3570;
+            line-height: 1.7;
+        }
+
+        .hard-problem strong { font-weight: 600; }
+
+        /* JOURNEY */
+        .journey {
+            margin-top: 36px;
+            position: relative;
+            padding-left: 60px;
+        }
+
+        .journey::before {
+            content: '';
+            position: absolute;
+            left: 21px;
+            top: 22px;
+            bottom: 22px;
+            width: 1px;
+            background: var(--border);
+        }
+
+        .journey-item {
+            position: relative;
+            padding-bottom: 30px;
+        }
+
+        .journey-item:last-child { padding-bottom: 0; }
+
+        .journey-node {
+            position: absolute;
+            left: -60px;
+            top: 0;
+            width: 42px; height: 42px;
+            border-radius: 50%;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            z-index: 1;
+        }
+
+        .journey-phase {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+
+        .journey-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-heading);
+            margin-bottom: 5px;
+        }
+
+        .journey-desc {
+            font-size: 13px;
+            color: var(--text-body);
+            line-height: 1.6;
+            max-width: 640px;
+        }
+
+        .journey-ai {
+            margin-top: 10px;
+            padding: 9px 14px;
+            background: var(--accent-subtle);
+            border-left: 2px solid var(--accent);
+            border-radius: 0 6px 6px 0;
+            font-size: 12px;
+            color: var(--accent);
+            line-height: 1.55;
+            max-width: 640px;
+        }
+
+        /* FOOTER */
+        footer {
+            border-top: 1px solid var(--border);
+            margin-top: 80px;
+            padding: 28px 36px;
+            font-size: 11px;
+            color: var(--text-muted);
+            text-align: center;
+            max-width: 1080px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <span class="nav-logo">Neko Health</span>
+    <a href="research/neko_personas.html">Personas</a>
+    <a href="research/competitive_landscape.html">Competitive</a>
+    <a href="#">AI Intelligence</a>
+</nav>
+
+<main>
+
+    <!-- HERO -->
+    <section id="hero">
+        <div class="hero-tag">Principal PM, AI/LLM · Neko Health</div>
+        <h1>Building Neko's<br>Health Intelligence</h1>
+        <p class="subtitle">How a health AI outperforms general-purpose models — not through a better model, but through deeper personalization, structured health context, and a rigorous eval loop.</p>
+    </section>
+
+    <!-- PIPELINE -->
+    <section id="pipeline">
+        <div class="section-label">01 — The Pipeline</div>
+        <h2>From scan data to member insight</h2>
+        <p class="section-desc">An offline pipeline runs after each scan — not in real time, but with care. Each layer has one job and hands off to the next.</p>
+
+        <div class="pipeline-wrap">
+            <div class="pipeline">
+                <div class="pipeline-node">
+                    <div class="pipeline-icon">⊕</div>
+                    <div class="pipeline-node-label">Scan</div>
+                    <div class="pipeline-node-desc">50M raw data points from 70+ sensors</div>
+                </div>
+                <div class="pipeline-arrow">→</div>
+                <div class="pipeline-node">
+                    <div class="pipeline-icon">≋</div>
+                    <div class="pipeline-node-label">Ingest &amp; Normalize</div>
+                    <div class="pipeline-node-desc">Clean, structure, and standardize raw data</div>
+                </div>
+                <div class="pipeline-arrow">→</div>
+                <div class="pipeline-node">
+                    <div class="pipeline-icon">◈</div>
+                    <div class="pipeline-node-label">Health Context Object</div>
+                    <div class="pipeline-node-desc">Structured representation of this member's health state</div>
+                </div>
+                <div class="pipeline-arrow">→</div>
+                <div class="pipeline-node">
+                    <div class="pipeline-icon">⚡</div>
+                    <div class="pipeline-node-label">Trigger Engine</div>
+                    <div class="pipeline-node-desc">Classifies findings; decides what to surface and when</div>
+                </div>
+                <div class="pipeline-arrow">→</div>
+                <div class="pipeline-node">
+                    <div class="pipeline-icon">✦</div>
+                    <div class="pipeline-node-label">LLM, RAG &amp; Tools</div>
+                    <div class="pipeline-node-desc">Generates personalized insight grounded in real data</div>
+                </div>
+                <div class="pipeline-arrow">→</div>
+                <div class="pipeline-node">
+                    <div class="pipeline-icon">◎</div>
+                    <div class="pipeline-node-label">Safety &amp; Grounding</div>
+                    <div class="pipeline-node-desc">Every claim anchored to data; serious findings escalated</div>
+                </div>
+                <div class="pipeline-arrow">→</div>
+                <div class="pipeline-node">
+                    <div class="pipeline-icon">◯</div>
+                    <div class="pipeline-node-label">Delivery</div>
+                    <div class="pipeline-node-desc">Member app, doctor pre-brief, chat interface</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- HEALTH CONTEXT OBJECT -->
+    <section id="context">
+        <div class="section-label">02 — Health Context Object</div>
+        <h2>The structured member health record</h2>
+        <p class="section-desc">Not the raw 50M data points — a distilled, labeled representation of what matters. This is what the LLM layer works from, not general medical knowledge. Yes, it's a data structure. Think of it as the patient file a GP opens before seeing you.</p>
+
+        <div class="context-card">
+            <div class="context-card-header">
+                <div class="context-card-header-dot"></div>
+                <div class="context-card-header-label">health_context_object</div>
+                <div class="context-card-header-member">member_id: 00124 &nbsp;·&nbsp; scan_date: 2026-04-15 &nbsp;·&nbsp; scan_number: 2</div>
+            </div>
+            <div class="context-grid">
+                <div class="context-col">
+                    <div class="context-col-title">Biomarkers — this scan vs last</div>
+                    <div class="biomarker-row">
+                        <span class="bm-name">Total cholesterol</span>
+                        <div class="bm-right">
+                            <span class="bm-value">187</span>
+                            <span class="delta d-down">↓ 11%</span>
+                        </div>
+                    </div>
+                    <div class="biomarker-row">
+                        <span class="bm-name">LDL</span>
+                        <div class="bm-right">
+                            <span class="bm-value">112</span>
+                            <span class="delta d-down">↓ 8%</span>
+                        </div>
+                    </div>
+                    <div class="biomarker-row">
+                        <span class="bm-name">HDL</span>
+                        <div class="bm-right">
+                            <span class="bm-value">58</span>
+                            <span class="delta d-flat">→ stable</span>
+                        </div>
+                    </div>
+                    <div class="biomarker-row">
+                        <span class="bm-name">Blood pressure</span>
+                        <div class="bm-right">
+                            <span class="bm-value">122/78</span>
+                            <span class="delta d-down">↓ 4%</span>
+                        </div>
+                    </div>
+                    <div class="biomarker-row">
+                        <span class="bm-name">HbA1c</span>
+                        <div class="bm-right">
+                            <span class="bm-value">5.4%</span>
+                            <span class="delta d-flat">→ stable</span>
+                        </div>
+                    </div>
+                    <div class="biomarker-row">
+                        <span class="bm-name">Waist circumference</span>
+                        <div class="bm-right">
+                            <span class="bm-value">84cm</span>
+                            <span class="delta d-up">↑ 2%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="context-col">
+                    <div class="context-col-title">Flagged findings</div>
+                    <div class="finding-row">
+                        <div class="finding-dot dot-flag"></div>
+                        <div>
+                            <div class="finding-label fl-flag">Requires doctor review</div>
+                            <div class="finding-text">ECG shows minor irregularity not seen in last scan. Included in pre-brief. Member should not be informed before consultation.</div>
+                        </div>
+                    </div>
+                    <div class="finding-row">
+                        <div class="finding-dot dot-watch"></div>
+                        <div>
+                            <div class="finding-label fl-watch">Watch — 2nd consecutive</div>
+                            <div class="finding-text">Waist circumference up 2cm year-over-year. Two scans in a row — now classified as a trend trigger.</div>
+                        </div>
+                    </div>
+                    <div class="finding-row">
+                        <div class="finding-dot dot-good"></div>
+                        <div>
+                            <div class="finding-label fl-good">Improved</div>
+                            <div class="finding-text">All cardiovascular markers trending positively. Dietary intervention confirmed effective — appropriate to surface as a win.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="context-col">
+                    <div class="context-col-title">Risk profile</div>
+                    <div class="risk-row">
+                        <span class="risk-name">Cardiovascular</span>
+                        <div class="risk-bar-outer">
+                            <div class="risk-bar-inner" style="width:18%;background:#4A6550"></div>
+                        </div>
+                        <span class="risk-level" style="color:#2C6B35">Low</span>
+                    </div>
+                    <div class="risk-row">
+                        <span class="risk-name">Metabolic</span>
+                        <div class="risk-bar-outer">
+                            <div class="risk-bar-inner" style="width:44%;background:#D4850A"></div>
+                        </div>
+                        <span class="risk-level" style="color:#8B5E0A">Medium</span>
+                    </div>
+                    <div class="risk-row">
+                        <span class="risk-name">Skin</span>
+                        <div class="risk-bar-outer">
+                            <div class="risk-bar-inner" style="width:12%;background:#4A6550"></div>
+                        </div>
+                        <span class="risk-level" style="color:#2C6B35">Low</span>
+                    </div>
+                    <div class="risk-row">
+                        <span class="risk-name">Musculoskeletal</span>
+                        <div class="risk-bar-outer">
+                            <div class="risk-bar-inner" style="width:36%;background:#D4850A"></div>
+                        </div>
+                        <span class="risk-level" style="color:#8B5E0A">Medium</span>
+                    </div>
+                    <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--border)">
+                        <div class="context-col-title">Next scan</div>
+                        <div style="font-size:14px;font-weight:600;color:var(--text-bright);margin-bottom:3px">April 2027</div>
+                        <div style="font-size:11px;color:var(--text-muted)">12 months · pre-scan triggers begin February</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TOOLS VS RAG -->
+    <section id="intelligence">
+        <div class="section-label">03 — The Intelligence Layer</div>
+        <h2>Tools vs RAG — why Neko needs both</h2>
+        <p class="section-desc">RAG makes the AI medically literate. Tools make it personally relevant. Together they're what separates a health knowledge base from a health intelligence layer.</p>
+
+        <div class="intelligence-grid">
+
+            <div class="intel-card rag">
+                <div class="intel-card-header">
+                    <div class="intel-icon">≋</div>
+                    <div>
+                        <div class="intel-card-name">RAG</div>
+                        <div class="intel-card-sub">Retrieval Augmented Generation</div>
+                    </div>
+                </div>
+                <div class="intel-card-body">
+                    <div class="intel-analogy">Before generating a response, search a knowledge base and hand the relevant pieces to the model as context. Like briefing a consultant with a folder of documents before the meeting — they read what's relevant, then answer.</div>
+                    <div class="intel-examples-label">At Neko, RAG handles</div>
+                    <div class="intel-example">Clinical guidelines for cardiovascular risk, metabolic markers, and skin findings</div>
+                    <div class="intel-example">Neko's curated biomarker interpretation guides — what ranges mean for this specific scan type</div>
+                    <div class="intel-example">Medical literature and the evidence base for recommendations</div>
+                    <div class="intel-example">Standard escalation protocols — when a finding requires a doctor vs a watch flag</div>
+                    <div class="intel-summary">Static knowledge. The AI learns what medicine knows.</div>
+                </div>
+            </div>
+
+            <div class="intel-card tools">
+                <div class="intel-card-header">
+                    <div class="intel-icon">⚡</div>
+                    <div>
+                        <div class="intel-card-name">Tools</div>
+                        <div class="intel-card-sub">Function calling during reasoning</div>
+                    </div>
+                </div>
+                <div class="intel-card-body">
+                    <div class="intel-analogy">The AI actively calls specific functions as it reasons — deciding what to look up and what actions to take. Like giving the consultant a laptop during the meeting so they can query live data in real time.</div>
+                    <div class="intel-examples-label">At Neko, tools handle</div>
+                    <div class="intel-example">
+                        <div class="intel-example-fn">get_member_scan_history(id, biomarker, n)</div>
+                        <div class="intel-example-desc">Retrieve LDL across last 3 scans to detect a trend</div>
+                    </div>
+                    <div class="intel-example">
+                        <div class="intel-example-fn">calculate_risk_delta(profile, scan)</div>
+                        <div class="intel-example-desc">Compute personalised risk change since last year</div>
+                    </div>
+                    <div class="intel-example">
+                        <div class="intel-example-fn">check_flagged_findings(member_id)</div>
+                        <div class="intel-example-desc">Look up outstanding doctor follow-ups for this member</div>
+                    </div>
+                    <div class="intel-example">
+                        <div class="intel-example-fn">route_to_clinical_review(finding, severity)</div>
+                        <div class="intel-example-desc">Escalate a serious finding before it surfaces to the member</div>
+                    </div>
+                    <div class="intel-summary">Dynamic and action-taking. The AI learns what you need.</div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="why-both">
+            <div class="why-both-icon">◈</div>
+            <div>
+                <div class="why-both-label">Why you need both</div>
+                <p>RAG alone produces a knowledgeable AI that can talk about health generally — but it has no idea who you are. Tools alone can access your data but don't know what to do with it clinically. Together, the model retrieves clinical context <em>and</em> queries your specific history, producing an insight that is both <strong>medically grounded and personally relevant</strong>. This is the same architectural shift I led at Cleo — moving from hardcoded topic handling to a tools-based model where the AI could call whatever capability it needed. That's what unlocked the ability to have a conversation about anything.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- TRIGGERS & OUTCOMES -->
+    <section id="triggers">
+        <div class="section-label">04 — Triggers &amp; Outcomes</div>
+        <h2>From trigger to insight to impact</h2>
+        <p class="section-desc">The trigger engine decides what's worth surfacing and when. Each trigger generates an insight — and tracking what comes next requires two time horizons: what you can measure now, and what you're actually trying to change.</p>
+
+        <div class="triggers-grid">
+
+            <div class="trigger-card">
+                <div class="trigger-header">
+                    <div class="trigger-icon" style="background:rgba(74,101,80,0.1);border:1px solid rgba(74,101,80,0.2)">⊕</div>
+                    <div>
+                        <div class="trigger-name">Scan Trigger</div>
+                        <div class="trigger-fires">Fires when: new scan completes</div>
+                    </div>
+                </div>
+                <div class="trigger-body">
+                    <div class="insight-block">
+                        <div class="insight-label">Insight generated</div>
+                        <div class="insight-text">"Your cholesterol improved 11% — here are your top 3 priorities before next year's scan, and one thing your doctor will want to discuss today."</div>
+                    </div>
+                    <div class="outcome-row">
+                        <div class="outcome-block prox">
+                            <div class="outcome-label prox">Proximate</div>
+                            <div class="outcome-text prox">Did the member open and read the summary? Did they arrive at their consultation prepared?</div>
+                        </div>
+                        <div class="outcome-block dist">
+                            <div class="outcome-label dist">Distal</div>
+                            <div class="outcome-text dist">Did biomarkers continue improving at the next scan? Did engagement predict rebooking?</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="trigger-card">
+                <div class="trigger-header">
+                    <div class="trigger-icon" style="background:rgba(212,133,10,0.1);border:1px solid rgba(212,133,10,0.2)">↗</div>
+                    <div>
+                        <div class="trigger-name">Trend Trigger</div>
+                        <div class="trigger-fires">Fires when: a pattern persists across 2+ scans</div>
+                    </div>
+                </div>
+                <div class="trigger-body">
+                    <div class="insight-block">
+                        <div class="insight-label">Insight generated</div>
+                        <div class="insight-text">"Your waist circumference has increased two scans in a row. This is now a pattern — here's what typically drives it and what to discuss with your doctor."</div>
+                    </div>
+                    <div class="outcome-row">
+                        <div class="outcome-block prox">
+                            <div class="outcome-label prox">Proximate</div>
+                            <div class="outcome-text prox">Did the member acknowledge the trend? Did they adjust lifestyle goals or schedule a GP appointment?</div>
+                        </div>
+                        <div class="outcome-block dist">
+                            <div class="outcome-label dist">Distal</div>
+                            <div class="outcome-text dist">Did the trend reverse at the next scan? Did early action prevent a metabolic finding?</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="trigger-card">
+                <div class="trigger-header">
+                    <div class="trigger-icon" style="background:rgba(43,95,138,0.09);border:1px solid rgba(43,95,138,0.2)">◷</div>
+                    <div>
+                        <div class="trigger-name">Temporal Trigger</div>
+                        <div class="trigger-fires">Fires when: 8 weeks before next scan</div>
+                    </div>
+                </div>
+                <div class="trigger-body">
+                    <div class="insight-block">
+                        <div class="insight-label">Insight generated</div>
+                        <div class="insight-text">"Your scan is in 8 weeks. Based on last year, here are the two areas where focused effort now will move the needle most."</div>
+                    </div>
+                    <div class="outcome-row">
+                        <div class="outcome-block prox">
+                            <div class="outcome-label prox">Proximate</div>
+                            <div class="outcome-text prox">Did the member engage with pre-scan guidance? Did they complete the recommended actions before arriving?</div>
+                        </div>
+                        <div class="outcome-block dist">
+                            <div class="outcome-label dist">Distal</div>
+                            <div class="outcome-text dist">Did the 8-week window produce measurable biomarker improvement at the scan?</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="trigger-card">
+                <div class="trigger-header">
+                    <div class="trigger-icon" style="background:rgba(107,78,138,0.09);border:1px solid rgba(107,78,138,0.2)">◆</div>
+                    <div>
+                        <div class="trigger-name">Action Trigger</div>
+                        <div class="trigger-fires">Fires when: doctor flags a finding for follow-up</div>
+                    </div>
+                </div>
+                <div class="trigger-body">
+                    <div class="insight-block">
+                        <div class="insight-label">Insight generated</div>
+                        <div class="insight-text">"4 weeks ago your doctor recommended a follow-up on your ECG finding. Here's what that appointment should cover and how to request it."</div>
+                    </div>
+                    <div class="outcome-row">
+                        <div class="outcome-block prox">
+                            <div class="outcome-label prox">Proximate</div>
+                            <div class="outcome-text prox">Did the member book the follow-up? Did they acknowledge the reminder within 7 days?</div>
+                        </div>
+                        <div class="outcome-block dist">
+                            <div class="outcome-label dist">Distal</div>
+                            <div class="outcome-text dist">Did the member receive appropriate care in time? Was the finding resolved or correctly escalated?</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- COMPARISON -->
+    <section id="comparison">
+        <div class="section-label">05 — Why this outperforms general AI</div>
+        <h2>The same question. A different answer.</h2>
+        <p class="section-desc">General models know medicine. Neko knows you. The difference isn't the model — it's the depth of personalization the health context object makes possible.</p>
+
+        <div class="comparison">
+            <div class="comp-card general">
+                <div class="comp-label general">General-purpose AI</div>
+                <div class="comp-question">"My LDL is 112. What does that mean?"</div>
+                <div class="comp-response general">An LDL of 112 mg/dL is considered near-optimal to borderline high, depending on your cardiovascular risk factors. The American Heart Association recommends keeping LDL below 100 mg/dL for most adults.<br><br>Lifestyle changes that may help include reducing saturated fat intake, increasing soluble fiber, and regular aerobic exercise. You should discuss your levels with your doctor if you have other risk factors such as high blood pressure or a family history of heart disease.</div>
+            </div>
+            <div class="comp-card neko">
+                <div class="comp-label neko">Neko AI</div>
+                <div class="comp-question">"My LDL is 112. What does that mean?"</div>
+                <div class="comp-response neko">Your LDL is <strong>112 — down 8% from last year's 122</strong>. That improvement lines up with the dietary changes you made after your last scan. Your overall cardiovascular risk profile is now low.<br><br>The one thing to watch: your waist circumference has increased two scans in a row, which can affect LDL over time. <strong>Your doctor will want to discuss this alongside your ECG finding today</strong> — here's how to prepare for that conversation.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- EVAL -->
+    <section id="eval">
+        <div class="section-label">06 — Eval Framework</div>
+        <h2>How we know if it's working</h2>
+        <p class="section-desc">Eval quality is the first metric, not the last. If the AI isn't clinically appropriate, nothing else matters — before conversion, before retention.</p>
+
+        <div class="eval-grid">
+            <div class="eval-card">
+                <div class="eval-card-title" style="color:var(--accent)">Offline eval — before launch</div>
+                <div class="eval-item">
+                    <div class="eval-dot"></div>
+                    <div>
+                        <div class="eval-metric">Doctor-as-judge</div>
+                        <div class="eval-desc">Clinical team rates a sample of AI summaries on accuracy, appropriateness, and escalation correctness. The ground truth proxy.</div>
+                    </div>
+                </div>
+                <div class="eval-item">
+                    <div class="eval-dot"></div>
+                    <div>
+                        <div class="eval-metric">Blind comparison</div>
+                        <div class="eval-desc">Same input to Neko AI and a general model. Do doctors consistently prefer Neko's output? This is the "outperforms" test.</div>
+                    </div>
+                </div>
+                <div class="eval-item">
+                    <div class="eval-dot"></div>
+                    <div>
+                        <div class="eval-metric">Red-teaming</div>
+                        <div class="eval-desc">Adversarial inputs: member reports chest pain at midnight, member says they'll ignore a flag, member asks "do I have cancer?" Does the AI route correctly?</div>
+                    </div>
+                </div>
+                <div class="eval-item">
+                    <div class="eval-dot"></div>
+                    <div>
+                        <div class="eval-metric">Regression suite</div>
+                        <div class="eval-desc">As the model improves, ensure past good outputs don't degrade. Quality gates before every release.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="eval-card">
+                <div class="eval-card-title" style="color:var(--proximate)">Online eval — post launch</div>
+                <div class="eval-item">
+                    <div class="eval-dot" style="background:var(--proximate)"></div>
+                    <div>
+                        <div class="eval-metric">Comprehension rate</div>
+                        <div class="eval-desc">Do members actually understand their summary? Comprehension ≠ having read it. Requires a short check.</div>
+                    </div>
+                </div>
+                <div class="eval-item">
+                    <div class="eval-dot" style="background:var(--proximate)"></div>
+                    <div>
+                        <div class="eval-metric">Doctor conversation quality</div>
+                        <div class="eval-desc">Do doctors report members arriving better prepared? Gold standard — measurable and clinically meaningful.</div>
+                    </div>
+                </div>
+                <div class="eval-item">
+                    <div class="eval-dot" style="background:var(--proximate)"></div>
+                    <div>
+                        <div class="eval-metric">Escalation precision/recall</div>
+                        <div class="eval-desc">When AI flags for clinical review, how often was it right? When it didn't flag, was it ever wrong?</div>
+                    </div>
+                </div>
+                <div class="eval-item">
+                    <div class="eval-dot" style="background:var(--proximate)"></div>
+                    <div>
+                        <div class="eval-metric">Rebooking correlation</div>
+                        <div class="eval-desc">Does higher AI engagement predict rebooking? The business case for the intelligence layer.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="hard-problem">
+            <div class="hard-problem-label">The hardest problem — closing the loop</div>
+            <p>You can't fully validate clinical AI in months. If Neko's AI tells a member their metabolic markers suggest pre-diabetic risk, you won't know for 1–2 years whether that was right and whether the actions helped. That's why outcome tracking infrastructure must be built from day one — even when you can't use it yet. <strong>We optimize on proximate outcomes in the short term, and build toward validating those proxies against distal outcomes over time. Proximate signals that don't eventually predict distal ones aren't worth optimizing.</strong></p>
+        </div>
+    </section>
+
+    <!-- MEMBER JOURNEY -->
+    <section id="journey">
+        <div class="section-label">07 — Member Journey</div>
+        <h2>The AI's role at every moment</h2>
+        <p class="section-desc">The member experience is a series of emotional states. The AI earns its place at each one — or loses trust if it gets it wrong.</p>
+
+        <div class="journey">
+
+            <div class="journey-item">
+                <div class="journey-node">⊕</div>
+                <div class="journey-phase">Immediately after scan</div>
+                <div class="journey-title">Anxious — "Did they find anything?"</div>
+                <div class="journey-desc">The member has sat in a scanner for an hour and doesn't know what was found. This is the highest emotional volatility moment in the entire experience.</div>
+                <div class="journey-ai">AI role: immediate reassurance and calibration. "Here's what we looked at, here's the overall picture, and here's what your doctor will cover today." No serious findings surfaced here — that's the doctor's role.</div>
+            </div>
+
+            <div class="journey-item">
+                <div class="journey-node">◈</div>
+                <div class="journey-phase">That evening, alone</div>
+                <div class="journey-title">Overwhelmed — "What does all this actually mean?"</div>
+                <div class="journey-desc">Without the AI, the alternative is Googling symptoms at midnight. This is where a general model is most likely to cause harm — and where Neko's personalization matters most.</div>
+                <div class="journey-ai">AI role: translate the health context object into the 3 things that matter, grounded in their specific results. Not population averages — their numbers, their trend, their next action.</div>
+            </div>
+
+            <div class="journey-item">
+                <div class="journey-node">◆</div>
+                <div class="journey-phase">Weeks 1–4</div>
+                <div class="journey-title">Motivated but drifting — "What should I actually do?"</div>
+                <div class="journey-desc">Good intentions fade without clear, specific next steps. The action trigger fires here if the doctor flagged anything. Even without a flag, follow-through needs structure.</div>
+                <div class="journey-ai">AI role: the 3 concrete actions, follow-up on flagged findings at the right cadence — not so frequent it's noise, not so rare it's forgotten.</div>
+            </div>
+
+            <div class="journey-item">
+                <div class="journey-node">↗</div>
+                <div class="journey-phase">Months 6–10</div>
+                <div class="journey-title">Disconnected — "Am I making progress?"</div>
+                <div class="journey-desc">Post-scan motivation fades. The longitudinal value of Neko's data becomes the product here — not a one-time snapshot, but a health trajectory. This is also where Neko differentiates from a one-off check-up.</div>
+                <div class="journey-ai">AI role: surface indicators of progress or regression. Keep the member connected to their health between scans — with wearable integration, lifestyle inputs, or simple check-ins tied to their priorities.</div>
+            </div>
+
+            <div class="journey-item">
+                <div class="journey-node">◷</div>
+                <div class="journey-phase">8 weeks before next scan</div>
+                <div class="journey-title">Re-engaged — "What should I focus on before I go back?"</div>
+                <div class="journey-desc">The temporal trigger fires. The member has a concrete goal: show up to the next scan with better numbers. This is the moment highest-intent engagement becomes possible.</div>
+                <div class="journey-ai">AI role: personalized pre-scan priorities based on last year's findings. "Last time, your LDL and waist circumference were the two things to move. Here's a focused 8-week plan." The intelligence layer creates a reason to rebook — and to care about the result.</div>
+            </div>
+
+        </div>
+    </section>
+
+</main>
+
+<footer>
+    Neko Health — Principal PM AI/LLM · Case Discussion
+</footer>
+
+</body>
+</html>
