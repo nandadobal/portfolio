@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Neko Health — Competitive Landscape &amp; JTBD Analysis</title>
+  <style>
+    :root {
+      --bg:         #F8F6F1;
+      --bg-card:    #FFFFFF;
+      --bg-accent:  #EDE9DF;
+      --green-dark: #2C3E30;
+      --green-mid:  #4A6550;
+      --green-light:#7A9B80;
+      --yellow-warm:#E8DFC0;
+      --yellow-pale:#F4EFE0;
+      --text:       #1A1C19;
+      --text-mid:   #4A4C49;
+      --text-light: #7A7C79;
+      --border:     #D8D4C8;
+      --red-flag:   #8B2E2E;
+      --red-bg:     #FDF0F0;
+      --tag-bg:     #E2EBE3;
+      --tag-text:   #2C3E30;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 15px;
+      line-height: 1.65;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--green-dark);
+      padding: 0 48px;
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      height: 52px;
+      overflow-x: auto;
+    }
+    nav a {
+      color: #AABDAC;
+      text-decoration: none;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      transition: color 0.15s;
+    }
+    nav a:hover { color: #FFFFFF; }
+    nav .nav-logo {
+      color: #FFFFFF;
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-right: auto;
+      text-decoration: none;
+    }
+    .nav-sep { color: #3D5040; font-size: 14px; }
+
+    /* ── HERO ── */
+    .hero {
+      background: var(--bg);
+      color: var(--text);
+      border-bottom: 1px solid var(--border);
+    }
+    .hero-inner {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 60px 48px 56px;
+    }
+    .hero-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--green-mid);
+      margin-bottom: 16px;
+    }
+    .hero h1 {
+      font-size: clamp(26px, 4vw, 44px);
+      font-weight: 700;
+      line-height: 1.15;
+      max-width: 700px;
+      margin-bottom: 20px;
+      color: var(--text);
+    }
+    .hero-sub {
+      font-size: 16px;
+      color: var(--text-mid);
+      max-width: 620px;
+      line-height: 1.7;
+    }
+    .hero-meta {
+      margin-top: 28px;
+      font-size: 12px;
+      color: var(--text-light);
+      letter-spacing: 0.06em;
+    }
+
+    /* ── LAYOUT ── */
+    .container {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 0 48px 80px;
+    }
+
+    /* ── SECTION ── */
+    section {
+      margin-top: 64px;
+    }
+    .section-label {
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--green-mid);
+      margin-bottom: 10px;
+    }
+    h2 {
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--green-dark);
+      margin-bottom: 8px;
+      line-height: 1.2;
+    }
+    h3 {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--green-dark);
+      margin-bottom: 8px;
+    }
+    .section-intro {
+      font-size: 15px;
+      color: var(--text-mid);
+      max-width: 780px;
+      margin-bottom: 32px;
+      line-height: 1.7;
+    }
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin: 64px 0 0;
+    }
+
+    /* ── CALLOUT ── */
+    .callout {
+      background: var(--yellow-pale);
+      border-left: 4px solid var(--green-mid);
+      padding: 20px 24px;
+      border-radius: 4px;
+      font-size: 14px;
+      color: var(--text);
+      line-height: 1.65;
+      margin-bottom: 32px;
+    }
+    .callout strong { color: var(--green-dark); }
+
+    .callout-alert {
+      background: var(--red-bg);
+      border-left: 4px solid var(--red-flag);
+    }
+    .callout-alert strong { color: var(--red-flag); }
+
+    /* ── JTBD CARDS ── */
+    .jtbd-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 16px;
+    }
+    .jtbd-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px 22px;
+    }
+    .jtbd-number {
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--green-light);
+      margin-bottom: 8px;
+    }
+    .jtbd-statement {
+      font-size: 14px;
+      font-style: italic;
+      color: var(--text);
+      margin-bottom: 10px;
+      line-height: 1.55;
+    }
+    .jtbd-driver {
+      font-size: 13px;
+      color: var(--text-mid);
+      margin-bottom: 8px;
+    }
+    .tag {
+      display: inline-block;
+      background: var(--tag-bg);
+      color: var(--tag-text);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      padding: 3px 8px;
+      border-radius: 3px;
+      text-transform: uppercase;
+    }
+
+    /* ── COMPETITOR TABLE ── */
+    .comp-block {
+      margin-bottom: 40px;
+    }
+    .comp-block-header {
+      background: var(--green-dark);
+      color: #FFFFFF;
+      padding: 12px 18px;
+      border-radius: 6px 6px 0 0;
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+    }
+    .comp-block-header .jtbd-ref {
+      font-size: 11px;
+      color: #7A9B80;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .comp-block-header h3 {
+      color: #FFFFFF;
+      font-size: 15px;
+      margin: 0;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13.5px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-top: none;
+    }
+    thead th {
+      background: var(--yellow-pale);
+      color: var(--green-dark);
+      font-weight: 700;
+      text-align: left;
+      padding: 10px 14px;
+      font-size: 12px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--border);
+    }
+    tbody td {
+      padding: 11px 14px;
+      vertical-align: top;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+      line-height: 1.55;
+    }
+    tbody tr:last-child td { border-bottom: none; }
+    tbody tr:hover td { background: var(--bg); }
+    .price-tag {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--green-mid);
+    }
+    .limitation {
+      color: var(--red-flag);
+      font-size: 12.5px;
+    }
+
+    /* ── DEEP DIVE ── */
+    .deep-dive-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-top: 24px;
+    }
+    @media (max-width: 720px) {
+      .deep-dive-grid { grid-template-columns: 1fr; }
+    }
+    .insight-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px 22px;
+    }
+    .insight-card h4 {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--green-dark);
+      margin-bottom: 8px;
+    }
+    .insight-card p, .insight-card li {
+      font-size: 13.5px;
+      color: var(--text-mid);
+      line-height: 1.6;
+    }
+    .insight-card ul { padding-left: 18px; }
+    .insight-card li { margin-bottom: 4px; }
+
+    /* ── GAPS ── */
+    .gap-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .gap-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px 24px;
+      display: grid;
+      grid-template-columns: 200px 1fr 1fr;
+      gap: 16px;
+      align-items: start;
+    }
+    @media (max-width: 800px) {
+      .gap-item { grid-template-columns: 1fr; }
+    }
+    .gap-label {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--green-dark);
+    }
+    .gap-priority {
+      display: inline-block;
+      margin-top: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 3px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .priority-high { background: #FFE8E8; color: #8B2E2E; }
+    .priority-mid  { background: #FFF3DC; color: #7A5200; }
+    .priority-low  { background: var(--tag-bg); color: var(--tag-text); }
+    .gap-body p { font-size: 13.5px; color: var(--text-mid); line-height: 1.6; }
+    .gap-body strong { color: var(--text); }
+
+    /* ── MISSING ── */
+    .missing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 16px;
+      margin-top: 8px;
+    }
+    .missing-card {
+      background: var(--yellow-pale);
+      border: 1px solid #D8CEAC;
+      border-radius: 8px;
+      padding: 18px 20px;
+    }
+    .missing-card h4 {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--green-dark);
+      margin-bottom: 8px;
+    }
+    .missing-card p {
+      font-size: 13px;
+      color: var(--text-mid);
+      line-height: 1.6;
+    }
+    .interview-angle {
+      font-size: 12.5px;
+      font-style: italic;
+      color: var(--green-mid);
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px solid #D8CEAC;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--green-dark);
+      color: #7A9B80;
+      text-align: center;
+      padding: 24px 48px;
+      font-size: 12px;
+      letter-spacing: 0.06em;
+      margin-top: 80px;
+    }
+    footer span { color: #FFFFFF; }
+
+    @media print {
+      nav { display: none; }
+      .hero { padding: 32px 24px; }
+      .container { padding: 0 24px 40px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAVIGATION ── -->
+<nav>
+  <span class="nav-logo">Neko Health</span>
+  <a href="neko_personas.html">Personas</a>
+  <a href="#">Competitive</a>
+  <a href="../neko_ai_architecture.html">AI Intelligence</a>
+</nav>
+
+<!-- ── HERO ── -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-label">Principal PM, AI/LLM · Neko Health</div>
+    <h1>Beyond the Body Scanner:<br>A JTBD-Led Competitive Landscape</h1>
+    <p class="hero-sub">Neko's real competitive set isn't Prenuvo or Ezra. It's every product that serves the same jobs to be done across the preventive health journey — from skin monitoring apps and CGM trackers to health anxiety tools and longevity clinics.</p>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- ── FRAMING ── -->
+  <section id="framing">
+    <div class="callout">
+      <strong>The core reframe:</strong> Most competitive analyses of Neko compare body scan clinics. That's the wrong lens. The better question is: <em>what jobs are Neko's members trying to get done?</em> Those jobs are served by dozens of categories that don't compete on clinic visits at all — apps, wearables, test kits, therapy platforms, and longevity clinics. Neko's real moat isn't against Prenuvo. It's whether it can own the full job across the entire health journey.
+    </div>
+  </section>
+
+  <!-- ── JTBD MAP ── -->
+  <div class="divider"></div>
+  <section id="jtbd">
+    <div class="section-label">Framework · Step 1</div>
+    <h2>Jobs to Be Done Map</h2>
+    <p class="section-intro">Ten distinct jobs that Neko's members are trying to get done. Each has an emotional driver and a primary persona. These are the actual demand categories Neko competes in — most of them are served by something other than a body scan clinic today.</p>
+
+    <div class="jtbd-grid">
+
+      <div class="jtbd-card">
+        <div class="jtbd-number">JTBD 01</div>
+        <div class="jtbd-statement">"When I'm generally healthy but uncertain, I want to know nothing is silently wrong so I can stop worrying and get on with my life."</div>
+        <div class="jtbd-driver"><strong>Driver:</strong> Health reassurance &amp; peace of mind</div>
+        <span class="tag">Primary Neko Job</span>
+      </div>
+
+      <div class="jtbd-card">
+        <div class="jtbd-number">JTBD 02</div>
+        <div class="jtbd-statement">"When I have a family history of heart disease or cancer, I want to catch a problem before I feel symptoms so I can act while I still can."</div>
+        <div class="jtbd-driver"><strong>Driver:</strong> Fear of inherited risk; early detection urgency</div>
+        <span class="tag">Primary Neko Job</span>
+      </div>
+
+      <div class="jtbd-card">
+        <div class="jtbd-number">JTBD 03</div>
+        <div class="jtbd-statement">"When I notice a changing mole or new skin lesion, I want a trustworthy answer on whether it's dangerous so I don't have to wait months for a dermatologist."</div>
+        <div class="jtbd-driver"><strong>Driver:</strong> Skin cancer fear; dermatology access gap</div>
+        <span class="tag">Neko Adjacent</span>
+      </div>
+
+      <div class="jtbd-card">
+        <div class="jtbd-number">JTBD 04</div>
+        <div class="jtbd-statement">"When I get lab results or scan data, I want someone to explain what it actually means for me — not just ranges — so I can make a real decision."</div>
+        <div class="jtbd-driver"><strong>Driver:</strong> Data overwhelm; clinical language gap</div>
+        <span class="tag">Neko Gap</span>
+      </div>
+
+      <div class="jtbd-card">
+        <div class="jtbd-number">JTBD 05</div>
+        <div class="jtbd-statement">"When I'm investing seriously in my longevity, I want a comprehensive baseline of my biomarkers and physiology so I can optimise intelligently."</div>
+        <div class="jtbd-driver"><strong>Driver:</strong> Healthspan optimisation; high-information consumer</div>
+        <span class="tag">Primary Neko Job</span>
+      </div>
+
+      <div class="jtbd-card">
+        <div class="jtbd-number">JTBD 06</div>
+        <div class="jtbd-statement">"When I know I have high cholesterol or elevated blood pressure, I want to track whether my lifestyle changes are working between GP visits."</div>
+        <div class="jtbd-driver"><strong>Driver:</strong> Chronic condition accountability; self-efficacy</div>
+        <span class="tag">Neko Gap</span>
+      </div>
+
+      <div class="jtbd-card">
+        <div class="jtbd-number">JTBD 07</div>
+        <div class="jtbd-statement">"When I've been told I need to change something, I want a system that holds me accountable so I actually follow through — not just good intentions."</div>
+        <div class="jtbd-driver"><strong>Driver:</strong> Behaviour change; accountability gap</div>
+        <span class="tag">Neko Gap</span>
+      </div>
+
+      <div class="jtbd-card">
+        <div class="jtbd-number">JTBD 08</div>
+        <div class="jtbd-statement">"When I worry chronically about my health, I want trustworthy reassurance that actually calms me — not information that sends me spiralling."</div>
+        <div class="jtbd-driver"><strong>Driver:</strong> Health anxiety; need for closure, not more data</div>
+        <span class="tag">Complex</span>
+      </div>
+
+      <div class="jtbd-card">
+        <div class="jtbd-number">JTBD 09</div>
+        <div class="jtbd-statement">"When my Apple Watch or Oura flags something unusual, I want to know if it's clinically significant or just noise — without booking a GP appointment."</div>
+        <div class="jtbd-driver"><strong>Driver:</strong> Wearable data interpretation; bridge to clinical insight</div>
+        <span class="tag">Emerging</span>
+      </div>
+
+      <div class="jtbd-card">
+        <div class="jtbd-number">JTBD 10</div>
+        <div class="jtbd-statement">"When my GP doesn't have time to run preventive checks, I want someone to fill that gap so I don't only find out about a problem when I'm already sick."</div>
+        <div class="jtbd-driver"><strong>Driver:</strong> Primary care gap; NHS access constraints</div>
+        <span class="tag">Primary Neko Job</span>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── COMPETITIVE MAP ── -->
+  <div class="divider"></div>
+  <section id="landscape">
+    <div class="section-label">Framework · Step 2</div>
+    <h2>Competitive Landscape by JTBD</h2>
+    <p class="section-intro">For each job to be done, what does a member reach for today? These are Neko's real competitors — not the ones any analyst would put in the same category.</p>
+
+    <!-- JTBD 01 -->
+    <div class="comp-block">
+      <div class="comp-block-header">
+        <div class="jtbd-ref">JTBD 01 &amp; 10</div>
+        <h3>Reassurance &amp; Bridging Healthcare Gaps</h3>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th>Category</th>
+            <th>How it serves the job</th>
+            <th>Key limitation vs Neko</th>
+            <th>Price</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Bupa Health Assessment</strong></td>
+            <td>Private clinic MOT</td>
+            <td>Full health check with GP, bloods, ECG, BMI, hearing, vision</td>
+            <td class="limitation">No proprietary scanning; mostly NHS-equivalent tests; no longitudinal comparison</td>
+            <td class="price-tag">£200–£600</td>
+          </tr>
+          <tr>
+            <td><strong>Nuffield Health Assessment</strong></td>
+            <td>Private clinic MOT</td>
+            <td>Comprehensive health screen, lifestyle advice, GP consultation</td>
+            <td class="limitation">Fragmented; relies on commodity diagnostics; no data flywheel</td>
+            <td class="price-tag">£250–£800</td>
+          </tr>
+          <tr>
+            <td><strong>Push Doctor / GPDQ</strong></td>
+            <td>Telehealth GP</td>
+            <td>On-demand GP access; reassurance consultations</td>
+            <td class="limitation">Reactive not preventive; no diagnostic data; no scanning capability</td>
+            <td class="price-tag">£30–£60/appt</td>
+          </tr>
+          <tr>
+            <td><strong>Numan</strong></td>
+            <td>Digital health + AI assistant</td>
+            <td>AI health assistant + blood tests + GP consultations; UK-native. Launched AI assistant 2025.</td>
+            <td class="limitation">Lab-only; no physical scanning; metabolic focus; primarily men's health</td>
+            <td class="price-tag">£50–£200</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- JTBD 02 -->
+    <div class="comp-block">
+      <div class="comp-block-header">
+        <div class="jtbd-ref">JTBD 02</div>
+        <h3>Early Detection of Serious Conditions</h3>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th>Category</th>
+            <th>How it serves the job</th>
+            <th>Key limitation vs Neko</th>
+            <th>Price</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>GRAIL Galleri</strong></td>
+            <td>Liquid biopsy (blood test)</td>
+            <td>Single blood draw detects 50+ cancer types before symptoms. Partnered with NHS for trials.</td>
+            <td class="limitation">Cancer-only; no cardiovascular, metabolic, or skin imaging; no annual safe repeat yet</td>
+            <td class="price-tag">~$949 US / NHS trial free</td>
+          </tr>
+          <tr>
+            <td><strong>Function Health</strong></td>
+            <td>Lab biomarker membership</td>
+            <td>100+ lab tests, cardiovascular, hormonal, metabolic, immune — with AI-driven insights. 50k members, 200k waitlist.</td>
+            <td class="limitation">Lab-only; no imaging; no skin; no physical presence; US-only currently</td>
+            <td class="price-tag">$499/yr</td>
+          </tr>
+          <tr>
+            <td><strong>Cleerly / HeartFlow</strong></td>
+            <td>AI cardiac imaging</td>
+            <td>AI analysis of CT scans to detect heart disease before it causes events</td>
+            <td class="limitation">Cardiovascular-only; requires CT (radiological); clinical referral needed; not consumer D2C</td>
+            <td class="price-tag">Clinical pricing</td>
+          </tr>
+          <tr>
+            <td><strong>Medichecks Advanced Cardiac</strong></td>
+            <td>At-home test kit</td>
+            <td>Cholesterol subtypes, hsCRP, Lp(a), ApoB — early cardiovascular risk markers</td>
+            <td class="limitation">Lab markers only; no imaging; no doctor consultation included; data not contextualised</td>
+            <td class="price-tag">£49–£199</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- JTBD 03 -->
+    <div class="comp-block">
+      <div class="comp-block-header">
+        <div class="jtbd-ref">JTBD 03</div>
+        <h3>Skin &amp; Mole Monitoring</h3>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th>Category</th>
+            <th>How it serves the job</th>
+            <th>Key limitation vs Neko</th>
+            <th>Price</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>SkinVision</strong></td>
+            <td>AI mole-checking app</td>
+            <td>CE-marked regulated medical device; AI assesses mole photos for risk; dermatologist review available</td>
+            <td class="limitation">Phone camera only — no full-body 3D mapping; user must remember to photograph every mole</td>
+            <td class="price-tag">~£20/month</td>
+          </tr>
+          <tr>
+            <td><strong>Miiskin</strong></td>
+            <td>Mole photo tracking app</td>
+            <td>Longitudinal mole photo comparison; body map; dermatologist consultation add-on</td>
+            <td class="limitation">No AI diagnosis; tracking only; user-dependent (requires consistent self-photography)</td>
+            <td class="price-tag">~£9/month</td>
+          </tr>
+          <tr>
+            <td><strong>First Derm</strong></td>
+            <td>Async teledermatology</td>
+            <td>Photo + async board-certified dermatologist review within 8 hours</td>
+            <td class="limitation">One-time consults; not longitudinal; no full-body mapping; reactive not preventive</td>
+            <td class="price-tag">$35–$75/consult</td>
+          </tr>
+          <tr>
+            <td><strong>Skin Analytics (NHS partner)</strong></td>
+            <td>AI dermoscopy (clinical)</td>
+            <td>AI triage of suspicious lesions; NHS-partnered pilot deployments across UK trusts</td>
+            <td class="limitation">Clinical-only; requires GP referral; not consumer D2C; NHS rollout is slow</td>
+            <td class="price-tag">NHS / institutional</td>
+          </tr>
+          <tr>
+            <td><strong>Skinive</strong></td>
+            <td>AI skin analysis app</td>
+            <td>50+ skin conditions, AI risk assessment, growing database</td>
+            <td class="limitation">No full-body mapping; condition database smaller than SkinVision; less clinical validation</td>
+            <td class="price-tag">Freemium</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- JTBD 04 -->
+    <div class="comp-block">
+      <div class="comp-block-header">
+        <div class="jtbd-ref">JTBD 04 &amp; 09</div>
+        <h3>Health Data Interpretation &amp; Wearable Insight</h3>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th>Category</th>
+            <th>How it serves the job</th>
+            <th>Key limitation vs Neko</th>
+            <th>Price</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>ZOE</strong></td>
+            <td>Personalised nutrition / CGM</td>
+            <td>Gut microbiome test + 2-week CGM + AI food guidance. Translates complex data into daily decisions. 150k+ members.</td>
+            <td class="limitation">Nutrition-only; no imaging; no cardiovascular or skin; no annual comprehensive scan</td>
+            <td class="price-tag">~£299 onboarding + £59/mo</td>
+          </tr>
+          <tr>
+            <td><strong>Levels / Nutrisense</strong></td>
+            <td>CGM metabolic health</td>
+            <td>Continuous glucose monitor + AI coach; helps interpret glycaemic response in real time</td>
+            <td class="limitation">Metabolic only; no longitudinal health picture; not clinically validated for non-diabetics</td>
+            <td class="price-tag">~$200/mo</td>
+          </tr>
+          <tr>
+            <td><strong>Oura Ring</strong></td>
+            <td>Health wearable</td>
+            <td>HRV, sleep stages, readiness, Symptom Radar (illness detection 1-2 days before feeling symptoms). 10M+ users.</td>
+            <td class="limitation">Not medical-grade; no imaging; doesn't detect structural disease; daily data only — no annual baseline</td>
+            <td class="price-tag">£299 + £5.99/mo</td>
+          </tr>
+          <tr>
+            <td><strong>Whoop MG</strong></td>
+            <td>Health wearable</td>
+            <td>Recovery, strain, sleep coaching; blood pressure monitoring. Healthspan positioning in 2025/26.</td>
+            <td class="limitation">Same as Oura; optimisation-focused, not early detection; not a medical device</td>
+            <td class="price-tag">£30/month</td>
+          </tr>
+          <tr>
+            <td><strong>Amazon Health AI / Apple Health</strong></td>
+            <td>Consumer AI health platforms</td>
+            <td>Three major tech companies launched consumer AI health apps in March 2026 — medical records + wearable + lab integration</td>
+            <td class="limitation">No proprietary data; works with existing records only; clinically shallow; trust gap</td>
+            <td class="price-tag">Freemium / bundled</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- JTBD 05 -->
+    <div class="comp-block">
+      <div class="comp-block-header">
+        <div class="jtbd-ref">JTBD 05</div>
+        <h3>Longevity &amp; Healthspan Optimisation</h3>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th>Category</th>
+            <th>How it serves the job</th>
+            <th>Key limitation vs Neko</th>
+            <th>Price</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Parsley Health</strong></td>
+            <td>Functional medicine clinic</td>
+            <td>Advanced biomarker panels + 30-min clinical review + lifestyle coaching. Relaunched Longevity Labs Nov 2025. 85% symptom relief rate.</td>
+            <td class="limitation">No physical imaging; US-focused; telehealth-only for most; no proprietary hardware</td>
+            <td class="price-tag">~$375/mo</td>
+          </tr>
+          <tr>
+            <td><strong>Wild Health</strong></td>
+            <td>Genomics + functional medicine</td>
+            <td>At-home genetic testing + tailored fitness/nutrition + personal health coach</td>
+            <td class="limitation">Genomics-led, not imaging-led; no annual physical scan; no skin assessment</td>
+            <td class="price-tag">~$100–$250/mo</td>
+          </tr>
+          <tr>
+            <td><strong>Human Longevity Inc.</strong></td>
+            <td>Ultra-premium clinic</td>
+            <td>MRI + genomics + metabolic + cognitive — the "rolls-royce" comprehensive scan</td>
+            <td class="limitation">$25k price point excludes mass market entirely; not scalable</td>
+            <td class="price-tag">$25,000+</td>
+          </tr>
+          <tr>
+            <td><strong>Thriva</strong></td>
+            <td>At-home biomarker subscription</td>
+            <td>Subscription-based biomarker panels; track cholesterol, vitamins, hormones quarterly</td>
+            <td class="limitation">Lab only; no imaging; no doctor consultation; basic results interface</td>
+            <td class="price-tag">£30–£120/test</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- JTBD 06/07 -->
+    <div class="comp-block">
+      <div class="comp-block-header">
+        <div class="jtbd-ref">JTBD 06 &amp; 07</div>
+        <h3>Chronic Condition Tracking &amp; Behaviour Change</h3>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th>Category</th>
+            <th>How it serves the job</th>
+            <th>Key limitation vs Neko</th>
+            <th>Price</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Vitality (insurance)</strong></td>
+            <td>Incentivised health insurance</td>
+            <td>Rewards members for healthy behaviours (steps, workouts); partners with Apple Watch, Strava, Nuffield</td>
+            <td class="limitation">Insurance-driven, not health-driven; gamification is shallow; no clinical data integration</td>
+            <td class="price-tag">Insurance premium</td>
+          </tr>
+          <tr>
+            <td><strong>Noom</strong></td>
+            <td>Weight &amp; behaviour change app</td>
+            <td>Psychology-based habit change for weight management; combines AI coaching with human coaching</td>
+            <td class="limitation">Weight-only; no biomarker or imaging integration; no clinical basis</td>
+            <td class="price-tag">~£50/mo</td>
+          </tr>
+          <tr>
+            <td><strong>Ultrahuman Ring</strong></td>
+            <td>Metabolic wearable</td>
+            <td>Sleep + glucose + metabolic score; "Home" hub adds blood pressure &amp; blood glucose sensing</td>
+            <td class="limitation">Consumer device; no imaging; not yet clinically validated; no annual comprehensive baseline</td>
+            <td class="price-tag">£250–£350 + subscription</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </section>
+
+  <!-- ── SKIN DEEP DIVE ── -->
+  <div class="divider"></div>
+  <section id="skin">
+    <div class="section-label">Deep Dive · JTBD 03</div>
+    <h2>Skin &amp; Mole Tracking</h2>
+    <p class="section-intro">Neko maps moles during every scan but isn't primarily positioned as a skin health product. The £450M+ AI dermatology market is growing at 27.6% CAGR to 2033. This is a JTBD Neko could own but currently shares with apps that serve it daily — not annually.</p>
+
+    <div class="callout">
+      <strong>The structural gap:</strong> Neko scans moles once a year. Moles that matter can change in weeks. SkinVision, Miiskin and others fill the 11-month gap — and build daily habit and brand loyalty doing so. Neko could own this JTBD end-to-end with a between-scan skin monitoring feature.
+    </div>
+
+    <div class="deep-dive-grid">
+      <div class="insight-card">
+        <h4>Market size</h4>
+        <p>AI Dermatology Apps market: <strong>$450M in 2025</strong>, projected to reach <strong>$3.2B by 2033</strong> (27.6% CAGR). Skin cancer is the most common cancer globally — melanoma detection is the #1 use case driving demand.</p>
+      </div>
+      <div class="insight-card">
+        <h4>Key regulatory signal</h4>
+        <p>SkinVision holds CE marking as a regulated medical device in Europe. Skin Analytics has active NHS partnerships for clinical triage. This space is moving toward clinical-grade validation faster than most consumer health verticals.</p>
+      </div>
+      <div class="insight-card">
+        <h4>What Neko does well</h4>
+        <ul>
+          <li>Full-body 3D mole mapping — no camera error, consistent angle</li>
+          <li>Longitudinal pixel-by-pixel comparison year-on-year</li>
+          <li>Doctor in the loop for any concerning finding</li>
+          <li>Non-radiological — safe for annual full-body coverage</li>
+        </ul>
+      </div>
+      <div class="insight-card">
+        <h4>What Neko doesn't do</h4>
+        <ul>
+          <li>No between-scan monitoring (11-month gap)</li>
+          <li>No push alert if a mole the member photographs at home looks concerning</li>
+          <li>No integration with apps like Miiskin for ongoing tracking</li>
+          <li>No dermatologist referral pathway built into the product</li>
+        </ul>
+      </div>
+      <div class="insight-card">
+        <h4>Opportunity for the interview</h4>
+        <p>A skin monitoring feature in the Neko app — using phone camera with AI guided by the Neko scan baseline — closes the annual gap, adds a daily engagement touchpoint, and creates a genuine moat. The Neko baseline scan creates a personalised dermoscopic map that no app can replicate without proprietary hardware.</p>
+      </div>
+      <div class="insight-card">
+        <h4>Partnership vs build</h4>
+        <p>Skin Analytics has NHS partnerships and clinical validation. A Neko × Skin Analytics integration — where Neko's mole map feeds into Skin Analytics' between-scan triage — could be faster and more clinically defensible than building in-house.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── HEALTH ANXIETY DEEP DIVE ── -->
+  <div class="divider"></div>
+  <section id="anxiety">
+    <div class="section-label">Deep Dive · JTBD 08</div>
+    <h2>Health Anxiety</h2>
+    <p class="section-intro">Health anxiety (illness anxiety disorder) affects an estimated 4–8% of the population — but overrepresents in preventive health consumers. The question of whether body scanning helps or worsens anxiety is unresolved and clinically important. This is the hardest design problem in Neko's product.</p>
+
+    <div class="callout callout-alert">
+      <strong>The double-edged sword:</strong> People with health anxiety are among Neko's most motivated customers. But they are also the segment most at risk of a poorly-designed results experience causing harm — spiralling into obsessive re-scanning, false-positive panic, or distorted self-perception. Prenuvo explicitly acknowledges this on their blog. Neko doesn't appear to.
+    </div>
+
+    <div class="deep-dive-grid">
+      <div class="insight-card">
+        <h4>What the evidence says</h4>
+        <p>The literature on scanning and health anxiety is mixed. CBT and ERP (Exposure and Response Prevention) have strong evidence for reducing health anxiety — <strong>over 70% improvement rate</strong>. Whether preventive scanning calms or amplifies anxiety depends almost entirely on how results are communicated and what support exists after.</p>
+      </div>
+      <div class="insight-card">
+        <h4>Who serves this JTBD today</h4>
+        <ul>
+          <li><strong>NoCD</strong> — OCD/health anxiety treatment via ERP</li>
+          <li><strong>Woebot</strong> — AI CBT chatbot; proven for anxiety reduction</li>
+          <li><strong>BetterHelp / Calm</strong> — therapy access and mindfulness</li>
+          <li><strong>Headspace Health</strong> — AI Emotional Resilience module (Apr 2025)</li>
+          <li><strong>GP reassurance</strong> — but access is scarce and time-limited</li>
+        </ul>
+      </div>
+      <div class="insight-card">
+        <h4>Design implications for Neko</h4>
+        <ul>
+          <li>Result framing matters more than result content — the same data can reassure or terrify depending on language and context</li>
+          <li>The doctor consultation must be designed for emotional containment, not just information delivery</li>
+          <li>The AI summary layer needs to know when to de-escalate — and when to escalate to a human</li>
+          <li>Repeat scanning cadence should be driven by clinical need, not anxiety-driven demand</li>
+        </ul>
+      </div>
+      <div class="insight-card">
+        <h4>Opportunity for the interview</h4>
+        <p>Neko's AI/LLM layer is the first line of emotional containment after a scan. The member summary should be designed with <strong>progressive disclosure</strong> — start with the overall message ("your cardiovascular health looks good"), then invite deeper exploration. Never lead with a long list of flags. The model should have an explicit anxiety de-escalation persona, not just a clinical readout mode.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── PRODUCT GAPS ── -->
+  <div class="divider"></div>
+  <section id="gaps">
+    <div class="section-label">Synthesis</div>
+    <h2>Product Gaps &amp; Opportunities</h2>
+    <p class="section-intro">Based on competitive research, user reviews, and JTBD mapping — where does Neko leave demand unserved? These are ordered by strategic priority for the AI/LLM role.</p>
+
+    <div class="gap-list">
+
+      <div class="gap-item">
+        <div>
+          <div class="gap-label">1. Between-Scan Engagement Desert</div>
+          <span class="gap-priority priority-high">High Priority</span>
+        </div>
+        <div class="gap-body">
+          <p><strong>JTBD:</strong> Data interpretation, chronic tracking, behaviour change</p>
+          <p>The member app is passive — results live there but nothing happens for 11 months. Users pay £299 once a year and then feel abandoned. The 80% rebooking rate suggests loyalty is real, but it could be much higher with ongoing AI engagement. <strong>Competitors like ZOE, Levels, Oura, and Thriva win on between-visit stickiness.</strong></p>
+        </div>
+        <div class="gap-body">
+          <p><strong>Opportunity:</strong> An AI health companion that interprets the scan results over time — suggests lifestyle changes, answers questions at 2am, tracks progress on flagged biomarkers, and connects the annual scan to daily decisions. This is exactly what the Principal PM - AI/LLM role should own.</p>
+        </div>
+      </div>
+
+      <div class="gap-item">
+        <div>
+          <div class="gap-label">2. Post-Scan Specialist Navigation</div>
+          <span class="gap-priority priority-high">High Priority</span>
+        </div>
+        <div class="gap-body">
+          <p><strong>JTBD:</strong> Early detection follow-through, healthcare navigation</p>
+          <p>14.1% of Neko members require further medical treatment — but the product ends at the doctor consultation. Members are left to self-navigate finding a cardiologist, dermatologist, or endocrinologist. User reviews flag this as a real pain point: <em>"the scan was great but I had no idea what to do next."</em></p>
+        </div>
+        <div class="gap-body">
+          <p><strong>Opportunity:</strong> AI-powered care navigation — the Neko app helps members act on their results by finding, booking, and briefing the right specialist. Neko's doctor-written brief becomes the referral letter. This closes the most critical gap in the clinical journey.</p>
+        </div>
+      </div>
+
+      <div class="gap-item">
+        <div>
+          <div class="gap-label">3. Skin Monitoring Between Scans</div>
+          <span class="gap-priority priority-high">High Priority</span>
+        </div>
+        <div class="gap-body">
+          <p><strong>JTBD:</strong> Skin &amp; mole monitoring (JTBD 03)</p>
+          <p>Neko maps every mole at year-one. But users are on their own for the 11 months between scans. SkinVision and Miiskin fill this gap — and are building loyalty and habit with it. Neko's mole map is the best possible baseline for a between-scan monitoring feature.</p>
+        </div>
+        <div class="gap-body">
+          <p><strong>Opportunity:</strong> A guided photo tool in the Neko app — "check this mole monthly" — where the AI compares member photos against the Neko mole map baseline. Only Neko has the baseline to make this genuinely accurate. Partnership with Skin Analytics or SkinVision is a faster path than building the AI from scratch.</p>
+        </div>
+      </div>
+
+      <div class="gap-item">
+        <div>
+          <div class="gap-label">4. Health Anxiety Experience Design</div>
+          <span class="gap-priority priority-mid">Medium Priority</span>
+        </div>
+        <div class="gap-body">
+          <p><strong>JTBD:</strong> Health reassurance &amp; anxiety management (JTBD 08)</p>
+          <p>User reviews mention anxiety-amplifying experiences: false positives, clinical language in results, inconsistent doctor consultations. The segment most likely to be on Neko's waitlist (health-aware, affluent, anxious about their future) is also the most likely to be harmed by a poorly-designed results moment.</p>
+        </div>
+        <div class="gap-body">
+          <p><strong>Opportunity:</strong> A results experience explicitly designed for progressive disclosure and emotional safety — starting with a clear "here's the headline" summary, then layering detail. The AI/LLM layer needs distinct communication modes: reassurance-first for clean results; careful, compassionate escalation for findings.</p>
+        </div>
+      </div>
+
+      <div class="gap-item">
+        <div>
+          <div class="gap-label">5. Wearable Data Integration</div>
+          <span class="gap-priority priority-mid">Medium Priority</span>
+        </div>
+        <div class="gap-body">
+          <p><strong>JTBD:</strong> Wearable data interpretation (JTBD 09)</p>
+          <p>32% of consumers now use AI for health information. Oura, Apple Watch, Whoop users generate daily streams of HRV, sleep, and heart data — but have no clinical context to interpret it. Neko has the clinical baseline that makes wearable data meaningful.</p>
+        </div>
+        <div class="gap-body">
+          <p><strong>Opportunity:</strong> Neko as the "clinical anchor" for wearable data — a member's Oura readiness score means something different when you know their resting heart rate baseline, VO2max, and cardiovascular risk profile from a Neko scan. Integration with Apple Health / Oura API is a clear product bet.</p>
+        </div>
+      </div>
+
+      <div class="gap-item">
+        <div>
+          <div class="gap-label">6. Family History &amp; Risk Context</div>
+          <span class="gap-priority priority-low">Lower Priority</span>
+        </div>
+        <div class="gap-body">
+          <p><strong>JTBD:</strong> Early detection (JTBD 02)</p>
+          <p>Family history is the strongest predictor of risk for most conditions Neko detects — but it's collected via a pre-scan questionnaire and then disappears. The AI layer could use it to personalise interpretation: "your blood pressure is 128/82 — that's borderline normal, but given your family history of hypertension, here's what I'd recommend."</p>
+        </div>
+        <div class="gap-body">
+          <p><strong>Opportunity:</strong> Family risk profiling baked into the AI interpretation layer — turning static questionnaire data into dynamic personalised context for every result narrative. A relatively low-complexity product bet with high differentiation value.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── WHAT'S MISSING ── -->
+  <div class="divider"></div>
+  <section id="missing">
+    <div class="section-label">Interview Edge</div>
+    <h2>What's Missing from Standard Neko Research</h2>
+    <p class="section-intro">Things that won't appear in the average competitor analysis — but that would signal genuine depth to the Neko interview team.</p>
+
+    <div class="missing-grid">
+
+      <div class="missing-card">
+        <h4>The Digital Twin is already real</h4>
+        <p>Neko already does pixel-by-pixel volumetric comparison between annual scans — not just data comparison, but a literal 3D model delta. This is infrastructure that no app competitor can build. It's underemphasised in public comms and should be front-and-centre in the AI product narrative.</p>
+        <div class="interview-angle">Angle: "The data moat isn't the scan — it's the longitudinal delta model. The AI layer has to be designed around that."</div>
+      </div>
+
+      <div class="missing-card">
+        <h4>AI health chatbots are becoming commoditized fast</h4>
+        <p>Amazon Health AI, Google, Apple, and Microsoft all launched consumer health AI in early 2026. 32% of consumers already use AI chatbots for health (double from a year ago). Neko's AI layer cannot compete on the interface — it has to win on the proprietary clinical data underneath it.</p>
+        <div class="interview-angle">Angle: "A generic LLM can translate lab results. Only Neko's LLM knows your full-body scan baseline."</div>
+      </div>
+
+      <div class="missing-card">
+        <h4>Neko's 2025 data story: 6x scan growth</h4>
+        <p>Neko delivered 6x more scans in 2025 vs 2024. Global signups exceed 300,000. Their first longitudinal cohort (1,469 members) showed measurable improvements in blood pressure, cholesterol, and blood sugar from scan 1 to scan 2. This is the product working — and is the foundation of a very compelling outcomes narrative.</p>
+        <div class="interview-angle">Angle: "The data flywheel is accelerating faster than the product layer. The AI/LLM role is how Neko closes that gap."</div>
+      </div>
+
+      <div class="missing-card">
+        <h4>GRAIL Galleri as a structural threat</h4>
+        <p>GRAIL's Galleri blood test detects 50+ cancer types from a single blood draw — and has active NHS trial partnerships. If liquid biopsy becomes mainstream for cancer detection, it reduces one of Neko's core value propositions. Neko's response must be: scanning catches what liquid biopsy misses (cardiovascular structure, skin, metabolic, MSK).</p>
+        <div class="interview-angle">Angle: Shows you understand the adjacent science, not just the direct competitive set.</div>
+      </div>
+
+      <div class="missing-card">
+        <h4>Numan: the UK competitor nobody mentions</h4>
+        <p>Numan — UK-native, D2C, launched an AI health assistant in 2025 — offers blood tests, GP consultations, and AI-personalised health guidance. Not a scanning company, but serves JTBD 01, 04, and 10 in the same UK market and demographic. Worth a pointed reference as the "closest AI health companion" competitor.</p>
+        <div class="interview-angle">Angle: "The real UK race is between clinic-led models like Neko and lab + AI companion models like Numan."</div>
+      </div>
+
+      <div class="missing-card">
+        <h4>The health anxiety design problem has no solved answer</h4>
+        <p>No competitor has elegantly solved how to communicate health risk data to a health-anxious consumer. Prenuvo acknowledges it on their blog; Neko doesn't appear to have a public position. This is both a product gap and a genuine interview differentiator — showing you've thought about the emotional design of the results experience.</p>
+        <div class="interview-angle">Angle: "The hardest design challenge isn't the AI — it's knowing when not to tell people everything at once."</div>
+      </div>
+
+      <div class="missing-card">
+        <h4>Between-scan is where loyalty is actually built</h4>
+        <p>80% rebooking sounds great — but ZOE has daily engagement. Oura has daily engagement. Thriva has quarterly touchpoints. Neko has one visit a year. The members who stay loyal do so despite the engagement desert, not because of it. The AI companion layer has an enormous opportunity to make Neko feel like a year-round relationship.</p>
+        <div class="interview-angle">Angle: "The scan is the acquisition moment. The AI layer is the retention engine."</div>
+      </div>
+
+      <div class="missing-card">
+        <h4>NYC launch spring 2026 — timing is everything</h4>
+        <p>Neko is opening in NYC in spring 2026. The US market has no equivalent (Prenuvo is MRI-based and radiological; Function Health is lab-only). The Principal PM role will ship into this expansion. Any product feature discussion should be framed with US launch timing, FDA regulatory constraints, and the different US consumer context in mind.</p>
+        <div class="interview-angle">Angle: "What I'd ship in the first 90 days of the NYC launch to differentiate from day one."</div>
+      </div>
+
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  Compiled April 2026 · <span>Neko Health</span> Principal PM – AI/LLM Interview Preparation · Not for distribution
+</footer>
+
+</body>
+</html>
